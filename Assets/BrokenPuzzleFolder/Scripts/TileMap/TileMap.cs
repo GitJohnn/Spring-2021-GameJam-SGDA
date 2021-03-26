@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileMap
 {
+    public event EventHandler OnLoaded; 
+    
     private Grid<TileMapObject> grid;
 
     public TileMap(int width, int height, float cellsize, Vector3 originPosition)
@@ -21,12 +24,55 @@ public class TileMap
         }
     }
 
+    public void SetTileMapVisual(TileMapVisual tilemapVisual)
+    {
+        tilemapVisual.SetGrid(this, grid);
+    }
+
+    /*
+     * Save - Load 
+    */
+    public class SaveObject
+    {
+        public TileMapObject.SaveObject[] tilemapObjectSaveObjectArray;
+    }
+
+    public void Save()
+    {
+        List<TileMapObject.SaveObject> tilemapObjectSaveObjectList = new List<TileMapObject.SaveObject>();
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++)
+            {
+                TileMapObject tilemapObject = grid.GetGridObject(x, y);
+                tilemapObjectSaveObjectList.Add(tilemapObject.Save());
+            }
+        }
+
+        SaveObject saveObject = new SaveObject { tilemapObjectSaveObjectArray = tilemapObjectSaveObjectList.ToArray() };
+
+        SaveSystem.SaveObject(saveObject);
+    }
+
+    public void Load()
+    {
+        SaveObject saveObject = SaveSystem.LoadMostRecentObject<SaveObject>();
+        foreach(TileMapObject.SaveObject tilemapObjectSaveObject in saveObject.tilemapObjectSaveObjectArray)
+        {
+            TileMapObject tilemapObject = grid.GetGridObject(tilemapObjectSaveObject.x, tilemapObjectSaveObject.y);
+            tilemapObject.Load(tilemapObjectSaveObject);
+        }
+        OnLoaded?.Invoke(this, EventArgs.Empty);
+    }
+
     public class TileMapObject
     {
         public enum TileMapSprite
         {
             None,
-            Ground
+            Path,
+            Grass,
+            Dirt
         }
 
         private Grid<TileMapObject> grid;
@@ -63,6 +109,30 @@ public class TileMap
         {
             return tilemapSprite.ToString();
         }
+
+        [System.Serializable]
+        public class SaveObject
+        {
+            public TileMapSprite tilemapSprite;
+            public int x;
+            public int y;
+        }
+
+        public SaveObject Save()
+        {
+            return new SaveObject
+            {
+                tilemapSprite = tilemapSprite,
+                x = x,
+                y = y
+            };
+        }
+
+        public void Load(SaveObject saveObject)
+        {
+            tilemapSprite = saveObject.tilemapSprite;
+        }
+
     }
 
 }

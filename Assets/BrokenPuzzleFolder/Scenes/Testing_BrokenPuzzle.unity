@@ -164,7 +164,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cfeb1cab03ea884796075202360e3c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilemapVisual: {fileID: 1855156122}
   gridTransform: {fileID: 845726660}
+  width: 22
+  heigh: 15
+  cellSize: 4
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +308,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845726659}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -42, y: -22, z: 0}
+  m_LocalPosition: {x: -44, y: -10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -319,6 +323,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1855156121}
+  - component: {fileID: 1855156122}
   - component: {fileID: 1855156120}
   - component: {fileID: 1855156119}
   m_Layer: 0
@@ -346,7 +351,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ee9eb9cf104c2fe4da729e21477b4a84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -389,3 +394,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1855156122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855156118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c955997ab0326c45bfecffb8939ad17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemapSpriteUVArray:
+  - tilemapSprite: 1
+    uv00Pixels: {x: 128, y: 0}
+    uv11Pixels: {x: 192, y: 64}
+  - tilemapSprite: 2
+    uv00Pixels: {x: 0, y: 0}
+    uv11Pixels: {x: 64, y: 64}
+  - tilemapSprite: 3
+    uv00Pixels: {x: 64, y: 0}
+    uv11Pixels: {x: 128, y: 64}

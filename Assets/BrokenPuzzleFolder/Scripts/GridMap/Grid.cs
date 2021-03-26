@@ -38,7 +38,7 @@ public class Grid<TGridObject>
             }
         }
 
-        bool showDebug = true;
+        bool showDebug = false;
         if (showDebug)
         {
             debugTextArray = new TextMesh[width, height];
@@ -47,7 +47,7 @@ public class Grid<TGridObject>
             {
                 for (int y = 0; y < gridArray.GetLength(1); y++)
                 {
-                    debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f, 20, Color.white, TextAnchor.MiddleCenter);
+                    debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f, 15, Color.white, TextAnchor.MiddleCenter);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
                 }
