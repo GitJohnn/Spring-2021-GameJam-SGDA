@@ -17,7 +17,9 @@ public class TileMapVisual : MonoBehaviour
     public void SetGrid(Grid<TileMap.TileMapObject> grid)
     {
         this.grid = grid;
+        UpdateTileMapVisual();
 
+        grid.OnGridValueChanged += Grid_OnGridValueChanged;
     }
 
     private void Grid_OnGridValueChanged(object sender, Grid<TileMap.TileMapObject>.OnGridValueChangedEventArgs e)
@@ -30,7 +32,7 @@ public class TileMapVisual : MonoBehaviour
         if (updateMesh)
         {
             updateMesh = false;
-            
+            UpdateTileMapVisual();
         }
     }
 
@@ -59,6 +61,10 @@ public class TileMapVisual : MonoBehaviour
                 MeshUtils.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * 0.5f, 0f, quadSize, Vector2.zero, Vector2.zero);
             }
         }
+
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.triangles = triangles;
     }
 
 }
