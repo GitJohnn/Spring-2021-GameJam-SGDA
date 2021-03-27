@@ -4,22 +4,59 @@ using UnityEngine;
 
 public class TileMapVisual : MonoBehaviour
 {
+    [System.Serializable]
+    public struct TilemapSpriteUV
+    {
+        public TileMap.TileMapObject.TileMapSprite tilemapSprite;
+        public Vector2Int uv00Pixels;
+        public Vector2Int uv11Pixels;
+    }
+
+    private struct UVcoords
+    {
+        public Vector2 uv00;
+        public Vector2 uv11;
+    }
+
+    [SerializeField] private TilemapSpriteUV[] tilemapSpriteUVArray;
     private Grid<TileMap.TileMapObject> grid;
     private Mesh mesh;
     private bool updateMesh;
+    private Dictionary<TileMap.TileMapObject.TileMapSprite, UVcoords> uvCoordsDictionary;
 
     private void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+
+        Texture texture = GetComponent<MeshRenderer>().material.mainTexture;
+        float textureWidth = texture.width;
+        float textureHeight = texture.height;
+
+        uvCoordsDictionary = new Dictionary<TileMap.TileMapObject.TileMapSprite, UVcoords>();
+
+        foreach(TilemapSpriteUV tilemapSpriteUV in tilemapSpriteUVArray)
+        {
+            uvCoordsDictionary[tilemapSpriteUV.tilemapSprite] = new UVcoords
+            {
+                uv00 = new Vector2(tilemapSpriteUV.uv00Pixels.x / textureWidth, tilemapSpriteUV.uv00Pixels.y / textureHeight),
+                uv11 = new Vector2(tilemapSpriteUV.uv11Pixels.x / textureWidth, tilemapSpriteUV.uv11Pixels.y / textureHeight),
+            };  
+        }
     }
 
-    public void SetGrid(Grid<TileMap.TileMapObject> grid)
+    public void SetGrid(TileMap tilemap, Grid<TileMap.TileMapObject> grid)
     {
         this.grid = grid;
         UpdateTileMapVisual();
 
         grid.OnGridValueChanged += Grid_OnGridValueChanged;
+        tilemap.OnLoaded += TileMap_OnLoaded;
+    }
+
+    private void TileMap_OnLoaded(object sender, System.EventArgs e)
+    {
+        updateMesh = true;
     }
 
     private void Grid_OnGridValueChanged(object sender, Grid<TileMap.TileMapObject>.OnGridValueChangedEventArgs e)
@@ -49,16 +86,20 @@ public class TileMapVisual : MonoBehaviour
 
                 TileMap.TileMapObject gridObject = grid.GetGridObject(x, y);
                 TileMap.TileMapObject.TileMapSprite tilemapSprite = gridObject.GetTileMapSprite();
-                Vector2 gridValueUV;
+                Vector2 gridValueUV00, gridValueUV11;
                 if(tilemapSprite == TileMap.TileMapObject.TileMapSprite.None)
                 {
-                    gridValueUV = Vector2.zero;
+                    gridValueUV00 = Vector2.zero;
+                    gridValueUV11 = Vector2.zero;
+                    quadSize = Vector3.zero;
                 }
                 else
                 {
-                    gridValueUV = Vector2.one;
+                    UVcoords uvCoords = uvCoordsDictionary[tilemapSprite];
+                    gridValueUV00 = uvCoords.uv00;
+                    gridValueUV11 = uvCoords.uv11;
                 }
-                MeshUtils.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * 0.5f, 0f, quadSize, Vector2.zero, Vector2.zero);
+                MeshUtils.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * 0.5f, 0f, quadSize, gridValueUV00, gridValueUV11);
             }
         }
 
