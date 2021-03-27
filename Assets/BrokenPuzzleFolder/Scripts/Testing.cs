@@ -9,9 +9,9 @@ public class Testing : MonoBehaviour
     [SerializeField] TileMapVisual tilemapVisual;
     [SerializeField] Transform gridTransform;
 
-    public int width = 1;
-    public int heigh = 1;
-    public int cellSize = 1;
+    public int width = 10;
+    public int heigh = 10;
+    public int cellSize = 10;
 
     private TileMap tilemap;
     private TileMap.TileMapObject.TileMapSprite tilemapSprite;
