@@ -2,44 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class Player : Character
+namespace FFL
 {
-    public ElementCard elementCard;
-    public WeaponCard weaponCard;
-    public ArmorCard armorCard;
-
-    public void AddCard(ElementCard card)
+    class Player : Character
     {
-        elementCard = card;
-    }
+        public ElementCard elementCard;
+        public WeaponCard weaponCard;
+        public ArmorCard armorCard;
 
-    public void AddCard(WeaponCard card)
-    {
-        weaponCard = card;
-    }
-
-    public void AddCard(ArmorCard card)
-    {
-        armorCard = card;
-    }
-
-    public override void Attack(Character target)
-    {
-        elementCard.ApplyEffect(target);
-        weaponCard.ApplyEffect(this);
-        armorCard.ApplyEffect(this);
-
-        int dmg = this.atk - target.def;
-        if (dmg <= 0) dmg = 0;
-        target.TakeDmg(dmg);
-
-        if (target.hasCounterStatus)
+        public void AddCard(ElementCard card)
         {
-            this.TakeDmg(1);
-            target.hasCounterStatus = false;
+            elementCard = card;
         }
 
+        public void AddCard(WeaponCard card)
+        {
+            weaponCard = card;
+        }
 
-        target.Attack(this);
+        public void AddCard(ArmorCard card)
+        {
+            armorCard = card;
+        }
+
+        public override void Attack(Character target)
+        {
+            elementCard.ApplyEffect(target);
+            weaponCard.ApplyEffect(this);
+            armorCard.ApplyEffect(this);
+
+            int dmg = atk - target.def;
+            if (dmg <= 0) dmg = 0;
+            target.TakeDmg(dmg);
+
+            if (target.hasCounterStatus)
+            {
+                TakeDmg(1);
+                target.hasCounterStatus = false;
+            }
+
+
+            target.Attack(this);
+        }
     }
 }

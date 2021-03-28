@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CombatManager : MonoBehaviour
+namespace FFL
 {
-    [SerializeField] Player player;
-    [SerializeField] Enemy enemy;
+    public class CombatManager : MonoBehaviour
+    {
+        [SerializeField] Player player;
+        [SerializeField] Enemy enemy;
 
-    [SerializeField] Text playerHP;
-    [SerializeField] Text enemyHP;
+        [SerializeField] Text playerHP;
+        [SerializeField] Text enemyHP;
+    }
 }

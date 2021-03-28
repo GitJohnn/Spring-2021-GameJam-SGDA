@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class Enemy : Character
+namespace FFL
 {
-    public override void Attack(Character target)
+    class Enemy : Character
     {
-        int dmg = this.atk - target.def;
-        if (dmg <= 0) dmg = 0;
-        target.TakeDmg(dmg);
-
-        if (target.hasCounterStatus)
+        public override void Attack(Character target)
         {
-            this.TakeDmg(1);
-            target.hasCounterStatus = false;
+            int dmg = atk - target.def;
+            if (dmg <= 0) dmg = 0;
+            target.TakeDmg(dmg);
+
+            if (target.hasCounterStatus)
+            {
+                TakeDmg(1);
+                target.hasCounterStatus = false;
+            }
         }
     }
 }
