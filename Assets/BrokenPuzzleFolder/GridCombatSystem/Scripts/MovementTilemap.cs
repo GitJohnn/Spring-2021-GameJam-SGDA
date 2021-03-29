@@ -39,8 +39,6 @@ public class MovementTilemap {
         tilemapVisual.SetGrid(this, grid);
     }
 
-
-
     /*
      * Save - Load
      * */
@@ -70,8 +68,6 @@ public class MovementTilemap {
         }
         OnLoaded?.Invoke(this, EventArgs.Empty);
     }
-
-
 
     /*
      * Represents a single Tilemap Object that exists in each Grid Cell Position

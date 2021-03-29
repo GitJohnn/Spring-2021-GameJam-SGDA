@@ -5,64 +5,120 @@ using CodeMonkey.Utils;
 using CodeMonkey;
 
 public class Testing : MonoBehaviour
-{
-    [SerializeField] TileMapVisual tilemapVisual;
-    [SerializeField] Transform gridTransform;
+{    
+    [SerializeField] SpriteTileMapVisual spriteTilemapVisual;
 
     public int width = 10;
     public int heigh = 10;
     public int cellSize = 10;
+    public string saveFileName;
 
-    private TileMap tilemap;
-    private TileMap.TileMapObject.TileMapSprite tilemapSprite;
+    private SpriteTileMap spriteTilemap;
+    private SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite tilemapSprite;
     
     private void Start()
     {
-        tilemap = new TileMap(width, heigh, cellSize, gridTransform.position);
+        spriteTilemap = new SpriteTileMap(width, heigh, cellSize, Vector3.zero);
 
-        tilemap.SetTileMapVisual(tilemapVisual);
+        spriteTilemap.SetTileMapVisual(spriteTilemapVisual);
+        spriteTilemap.Load(saveFileName);
+
+        GameHandler_GridCombatSystem.Instance.gridPathfinding.RaycastWalkable();
+        //GameHandler_GridCombatSystem.Instance.gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
     }
 
 
-    private void Update()
+    //private void Update()
+    //{
+        //if (Input.GetMouseButton(0))
+        //{
+        //    Vector3 position = UtilsClass.GetMouseWorldPosition();
+        //    SpriteTileMap.SpriteTileMapObject tileObj = spriteTilemap.GetTileMapObject(position);
+        //    if (tilemapSprite != SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Obstacle)
+        //    {
+        //        spriteTilemap.SetTileMapSprite(position, tilemapSprite);
+        //    }
+        //    else if(tileObj.GetObstacleObject() == null)
+        //    {
+        //        tileObj.InitializeObstacle();
+        //    }
+        //    else if(tileObj.GetObstacleObject() != null)
+        //    {
+        //        tileObj.ObstacleActivation(true);
+        //    }
+        //    //Debug.Log(spriteTilemap.GetTileMapObject(position).GetSpriteObject().name + " sprite has been set to " + tilemapSprite.ToString());
+        //}
+
+        //if (Input.GetMouseButton(1))
+        //{
+        //    Vector3 position = UtilsClass.GetMouseWorldPosition();
+        //    SpriteTileMap.SpriteTileMapObject tileObj = spriteTilemap.GetTileMapObject(position);
+        //    if (tileObj.GetObstacleObject() != null)
+        //    {
+        //        tileObj.ObstacleActivation(false);
+        //    }
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.None;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Path;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Grass;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Dirt;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+
+
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    spriteTilemap.Save(saveFileName);
+        //    CMDebug.TextPopupMouse("Saved!");
+        //}
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    spriteTilemap.Load(saveFileName);
+        //    CMDebug.TextPopupMouse("Loaded!");
+        //}
+    //}
+
+    public void SwitchTilemapSprite(string tileName)
     {
-        if (Input.GetMouseButtonDown(0))
+        switch (tileName)
         {
-            Vector3 position = UtilsClass.GetMouseWorldPosition();
-            tilemap.SetTileMapSprite(position, tilemapSprite);
+            case "None":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.None;
+                break;
+            case "Path":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Path;
+                break;
+            case "Grass":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Grass;
+                break;
+            case "Dirt":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Dirt;
+                break;
+            case "Road":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Road;
+                break;
+            case "Wood":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Wood;
+                break;
+            case "Obstacle":
+                tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Obstacle;
+                break;
         }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            tilemapSprite = TileMap.TileMapObject.TileMapSprite.None;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            tilemapSprite = TileMap.TileMapObject.TileMapSprite.Path;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            tilemapSprite = TileMap.TileMapObject.TileMapSprite.Grass;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            tilemapSprite = TileMap.TileMapObject.TileMapSprite.Dirt;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            tilemap.Save();
-            CMDebug.TextPopupMouse("Saved!");
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            tilemap.Load();
-            CMDebug.TextPopupMouse("Loaded!");
-        }
+        CMDebug.TextPopupMouse(tilemapSprite.ToString());
     }
 }

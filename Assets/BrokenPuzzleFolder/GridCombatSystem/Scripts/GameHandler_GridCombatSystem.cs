@@ -14,28 +14,30 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     [SerializeField] private MovementTilemapVisual movementTilemapVisual;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
+    [SerializeField] int mapWidth = 40;
+    [SerializeField] int mapHeight = 25;
+    [SerializeField] float cellSize = 10f;
+    Vector3 origin = new Vector3(0, 0);
+
     private Grid<GridCombatSystem.GridObject> grid;
     private MovementTilemap movementTilemap;
     public GridPathfinding gridPathfinding;
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
-
-        int mapWidth = 40;
-        int mapHeight = 25;
-        float cellSize = 10f;
-        Vector3 origin = new Vector3(0, 0);
 
         grid = new Grid<GridCombatSystem.GridObject>(mapWidth, mapHeight, cellSize, origin, (Grid<GridCombatSystem.GridObject> g, int x, int y) => new GridCombatSystem.GridObject(g, x, y));
 
         gridPathfinding = new GridPathfinding(origin + new Vector3(1, 1) * cellSize * .5f, new Vector3(mapWidth, mapHeight) * cellSize, cellSize);
-        gridPathfinding.RaycastWalkable();
+        //gridPathfinding.RaycastWalkable();
         //gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
 
         movementTilemap = new MovementTilemap(mapWidth, mapHeight, cellSize, origin);
     }
 
-    private void Start() {
+    private void Start()
+    {
         movementTilemap.SetTilemapVisual(movementTilemapVisual);
         /*
         movementTilemap.SetAllTilemapSprite(MovementTilemap.TilemapObject.TilemapSprite.Move);
@@ -61,22 +63,28 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         */
     }
 
-    private void Update() {
+    private void Update()
+    {
         HandleCameraMovement();
     }
 
-    private void HandleCameraMovement() {
+    private void HandleCameraMovement()
+    {
         Vector3 moveDir = new Vector3(0, 0);
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
             moveDir.y = +1;
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
             moveDir.y = -1;
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
             moveDir.x = -1;
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
             moveDir.x = +1;
         }
         moveDir.Normalize();
@@ -85,28 +93,28 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         cinemachineFollowTransform.position += moveDir * moveSpeed * Time.deltaTime;
     }
 
-    public Grid<GridCombatSystem.GridObject> GetGrid() {
+    public Grid<GridCombatSystem.GridObject> GetGrid()
+    {
         return grid;
     }
 
-    public MovementTilemap GetMovementTilemap() {
+    public MovementTilemap GetMovementTilemap()
+    {
         return movementTilemap;
     }
 
-    public void SetCameraFollowPosition(Vector3 targetPosition) {
+    public void SetCameraFollowPosition(Vector3 targetPosition)
+    {
         cinemachineFollowTransform.position = targetPosition;
     }
 
-    public void ScreenShake() {
+    public void ScreenShake()
+    {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 15f;
 
         FunctionTimer.Create(() => { cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f; }, .1f);
     }
-
-
-
-
 
     public class EmptyGridObject {
 
@@ -114,7 +122,8 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         private int x;
         private int y;
 
-        public EmptyGridObject(Grid<EmptyGridObject> grid, int x, int y) {
+        public EmptyGridObject(Grid<EmptyGridObject> grid, int x, int y)
+        {
             this.grid = grid;
             this.x = x;
             this.y = y;
@@ -130,7 +139,8 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
             Debug.DrawLine(worldPos10, worldPos11, Color.white, 999f);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return "";
         }
     }

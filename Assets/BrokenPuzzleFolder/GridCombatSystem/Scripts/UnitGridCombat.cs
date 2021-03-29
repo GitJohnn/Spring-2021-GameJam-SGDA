@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using CodeMonkey.Utils;
 
-public class UnitGridCombat : MonoBehaviour {
-
+public class UnitGridCombat : MonoBehaviour
+{
     [SerializeField] private Team team;
+    [SerializeField] private int maxMoveDistance = 5;
+    [SerializeField] private Light2D unitLight;
 
     private Character_Base characterBase;
     private HealthSystem healthSystem;
@@ -15,18 +18,41 @@ public class UnitGridCombat : MonoBehaviour {
     private State state;
     private World_Bar healthBar;
 
-    public enum Team {
+    public void IsLightActive(bool isActive)
+    {
+        if(unitLight != null)
+        {
+            if (isActive)
+            {
+                unitLight.intensity = 1f;
+            }
+            else
+            {
+                unitLight.intensity = 0.4f;
+            }
+        }
+        else
+        {
+            Debug.Log("No light added to unit " + this.transform.name);
+        }
+    }
+
+    public enum Team
+    {
         Player,
         Enemy
     }
 
-    private enum State {
+    private enum State
+    {
         Normal,
         Moving,
         Attacking
     }
 
-    private void Awake() {
+    private void Awake()
+    {
+        IsLightActive(false);
         characterBase = GetComponent<Character_Base>();
         selectedGameObject = transform.Find("Selected").gameObject;
         movePosition = GetComponent<MovePositionPathfinding>();
@@ -37,11 +63,13 @@ public class UnitGridCombat : MonoBehaviour {
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
     }
 
-    private void HealthSystem_OnHealthChanged(object sender, EventArgs e) {
+    private void HealthSystem_OnHealthChanged(object sender, EventArgs e)
+    {
         healthBar.SetSize(healthSystem.GetHealthNormalized());
     }
 
-    private void Update() {
+    private void Update()
+    {
         switch (state) {
             case State.Normal:
                 break;
@@ -52,11 +80,13 @@ public class UnitGridCombat : MonoBehaviour {
         }
     }
 
-    public void SetSelectedVisible(bool visible) {
+    public void SetSelectedVisible(bool visible)
+    {
         selectedGameObject.SetActive(visible);
     }
 
-    public void MoveTo(Vector3 targetPosition, Action onReachedPosition) {
+    public void MoveTo(Vector3 targetPosition, Action onReachedPosition)
+    {
         state = State.Moving;
         movePosition.SetMovePosition(targetPosition + new Vector3(1, 1), () => {
             state = State.Normal;
@@ -64,11 +94,13 @@ public class UnitGridCombat : MonoBehaviour {
         });
     }
 
-    public bool CanAttackUnit(UnitGridCombat unitGridCombat) {
+    public bool CanAttackUnit(UnitGridCombat unitGridCombat)
+    {
         return Vector3.Distance(GetPosition(), unitGridCombat.GetPosition()) < 50f;
     }
 
-    public void AttackUnit(UnitGridCombat unitGridCombat, Action onAttackComplete) {
+    public void AttackUnit(UnitGridCombat unitGridCombat, Action onAttackComplete)
+    {
         state = State.Attacking;
 
         ShootUnit(unitGridCombat, () => {
@@ -89,7 +121,8 @@ public class UnitGridCombat : MonoBehaviour {
         });
     }
 
-    private void ShootUnit(UnitGridCombat unitGridCombat, Action onShootComplete) {
+    private void ShootUnit(UnitGridCombat unitGridCombat, Action onShootComplete)
+    {
         GetComponent<IMoveVelocity>().Disable();
         Vector3 attackDir = (unitGridCombat.GetPosition() - transform.position).normalized;
         //UtilsClass.ShakeCamera(.6f, .1f);
@@ -107,7 +140,8 @@ public class UnitGridCombat : MonoBehaviour {
         });
     }
 
-    public void Damage(UnitGridCombat attacker, int damageAmount) {
+    public void Damage(UnitGridCombat attacker, int damageAmount)
+    {
         Vector3 bloodDir = (GetPosition() - attacker.GetPosition()).normalized;
         Blood_Handler.SpawnBlood(GetPosition(), bloodDir);
 
@@ -122,19 +156,28 @@ public class UnitGridCombat : MonoBehaviour {
         }
     }
 
-    public bool IsDead() {
+    public bool IsDead()
+    {
         return healthSystem.IsDead();
     }
 
-    public Vector3 GetPosition() {
+    public Vector3 GetPosition()
+    {
         return transform.position;
     }
 
-    public Team GetTeam() {
+    public Team GetTeam()
+    {
         return team;
     }
 
-    public bool IsEnemy(UnitGridCombat unitGridCombat) {
+    public int GetMaxMoveDistance()
+    {
+        return maxMoveDistance;
+    }
+
+    public bool IsEnemy(UnitGridCombat unitGridCombat)
+    {
         return unitGridCombat.GetTeam() != team;
     }
 

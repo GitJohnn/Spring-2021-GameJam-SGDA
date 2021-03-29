@@ -31,8 +31,8 @@ public class Character_Base : MonoBehaviour, ICharacterAnims, IGetPosition {
 
     private void Awake() {
         Transform bodyTransform = transform.Find("Body");
-        unitSkeleton = new V_UnitSkeleton(1f, bodyTransform.TransformPoint, (Mesh mesh) => bodyTransform.GetComponent<MeshFilter>().mesh = mesh);
-        unitAnimation = new V_UnitAnimation(unitSkeleton);
+        //unitSkeleton = new V_UnitSkeleton(1f, bodyTransform.TransformPoint, (Mesh mesh) => bodyTransform.GetComponent<MeshFilter>().mesh = mesh);
+        //unitAnimation = new V_UnitAnimation(unitSkeleton);
         
         UnitAnimType idleUnitAnim = UnitAnimType.GetUnitAnimType(idleAnimation);
         UnitAnimType walkUnitAnim = UnitAnimType.GetUnitAnimType(walkAnimation);
