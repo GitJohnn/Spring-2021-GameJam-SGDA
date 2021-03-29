@@ -48,9 +48,7 @@ public class SpriteTileMapVisual : MonoBehaviour
 
     private void UpdateTileMapVisual()
     {
-
         //MeshUtils.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
-
         for (int x = 0; x < grid.GetWidth(); x++)
         {
             for (int y = 0; y < grid.GetHeight(); y++)
@@ -65,8 +63,7 @@ public class SpriteTileMapVisual : MonoBehaviour
                 if (gridObject.GetObstacleObject() != null)
                 {
                     gridObject.SetObstacleSprite(tileDictionary[SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Obstacle]);
-                }
-                Debug.Log("Updating sprite");
+                }                
                 ////Vector2 gridValueUV00, gridValueUV11;
                 //foreach (SpriteTileMap.SpriteTileMapObject tileObject in tilesetObjectArray)
                 //{

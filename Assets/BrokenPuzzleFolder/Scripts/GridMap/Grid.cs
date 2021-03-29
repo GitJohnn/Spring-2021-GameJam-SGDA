@@ -127,4 +127,17 @@ public class Grid<TGridObject>
     {
         return cellSize;
     }
+
+    public bool IsInGrid(Vector3 worldPosition)
+    {
+        GetXY(worldPosition, out int x, out int y);
+        if (x >= 0 && y >= 0 && x < width && y < height)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

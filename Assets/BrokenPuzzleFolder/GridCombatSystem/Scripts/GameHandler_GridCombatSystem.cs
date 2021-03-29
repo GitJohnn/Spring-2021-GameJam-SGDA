@@ -12,8 +12,9 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
 
     [SerializeField] private Transform cinemachineFollowTransform;
     [SerializeField] private MovementTilemapVisual movementTilemapVisual;
+    [SerializeField] private SpriteTileMapVisual spriteTilemapVisual;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
-
+    [SerializeField] private string saveFileName;
     [SerializeField] int mapWidth = 40;
     [SerializeField] int mapHeight = 25;
     [SerializeField] float cellSize = 10f;
@@ -21,6 +22,7 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
 
     private Grid<GridCombatSystem.GridObject> grid;
     private MovementTilemap movementTilemap;
+    private SpriteTileMap spriteTilemap;
     public GridPathfinding gridPathfinding;
 
     private void Awake()
@@ -30,15 +32,20 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         grid = new Grid<GridCombatSystem.GridObject>(mapWidth, mapHeight, cellSize, origin, (Grid<GridCombatSystem.GridObject> g, int x, int y) => new GridCombatSystem.GridObject(g, x, y));
 
         gridPathfinding = new GridPathfinding(origin + new Vector3(1, 1) * cellSize * .5f, new Vector3(mapWidth, mapHeight) * cellSize, cellSize);
-        //gridPathfinding.RaycastWalkable();
-        //gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
-
+      
         movementTilemap = new MovementTilemap(mapWidth, mapHeight, cellSize, origin);
+        spriteTilemap = new SpriteTileMap(mapWidth, mapHeight, cellSize, origin);       
     }
 
     private void Start()
     {
+        spriteTilemap.SetTileMapVisual(spriteTilemapVisual);
         movementTilemap.SetTilemapVisual(movementTilemapVisual);
+
+        spriteTilemap.Load(saveFileName);
+        gridPathfinding.RaycastWalkable();
+        //gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
+
         /*
         movementTilemap.SetAllTilemapSprite(MovementTilemap.TilemapObject.TilemapSprite.Move);
         grid.GetXY(new Vector3(171.5f, 128.5f), out int testX, out int testY);

@@ -126,13 +126,15 @@ public class UnitGridCombat : MonoBehaviour
         GetComponent<IMoveVelocity>().Disable();
         Vector3 attackDir = (unitGridCombat.GetPosition() - transform.position).normalized;
         //UtilsClass.ShakeCamera(.6f, .1f);
-        GameHandler_GridCombatSystem.Instance.ScreenShake();
+        //GameHandler_GridCombatSystem.Instance.ScreenShake();
 
-        characterBase.PlayShootAnimation(attackDir, (Vector3 vec) => {
+        characterBase.PlayShootAnimation(attackDir, (Vector3 vec) =>
+        {
             Shoot_Flash.AddFlash(vec);
             WeaponTracer.Create(vec, unitGridCombat.GetPosition() + UtilsClass.GetRandomDir() * UnityEngine.Random.Range(-2f, 4f));
             unitGridCombat.Damage(this, UnityEngine.Random.Range(4, 12));
-        }, () => {
+        }, () =>
+        {
             characterBase.PlayIdleAnim();
             GetComponent<IMoveVelocity>().Enable();
 

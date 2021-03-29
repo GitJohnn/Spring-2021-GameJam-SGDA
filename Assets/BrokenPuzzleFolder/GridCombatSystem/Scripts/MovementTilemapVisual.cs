@@ -54,7 +54,7 @@ public class MovementTilemapVisual : MonoBehaviour {
 
     public void SetGrid(MovementTilemap tilemap, Grid<MovementTilemap.TilemapObject> grid) {
         this.grid = grid;
-        UpdateHeatMapVisual();
+        UpdateMovementMapVisual();
 
         grid.OnGridValueChanged += Grid_OnGridValueChanged;
         tilemap.OnLoaded += Tilemap_OnLoaded;
@@ -71,11 +71,11 @@ public class MovementTilemapVisual : MonoBehaviour {
     private void LateUpdate() {
         if (updateMesh) {
             updateMesh = false;
-            UpdateHeatMapVisual();
+            UpdateMovementMapVisual();
         }
     }
 
-    private void UpdateHeatMapVisual() {
+    private void UpdateMovementMapVisual() {
         MeshUtils.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
 
         for (int x = 0; x < grid.GetWidth(); x++) {
