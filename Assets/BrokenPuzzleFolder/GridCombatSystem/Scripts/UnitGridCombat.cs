@@ -10,8 +10,9 @@ public class UnitGridCombat : MonoBehaviour
     [SerializeField] private Team team;
     [SerializeField] private int maxMoveDistance = 5;
     [SerializeField] private Light2D unitLight;
+    [SerializeField] private int healthAmount = 100;
 
-    private Character_Base characterBase;
+    //private Character_Base characterBase;
     private HealthSystem healthSystem;
     private GameObject selectedGameObject;
     private MovePositionPathfinding movePosition;
@@ -53,12 +54,12 @@ public class UnitGridCombat : MonoBehaviour
     private void Awake()
     {
         IsLightActive(false);
-        characterBase = GetComponent<Character_Base>();
+        //characterBase = GetComponent<Character_Base>();
         selectedGameObject = transform.Find("Selected").gameObject;
         movePosition = GetComponent<MovePositionPathfinding>();
         //SetSelectedVisible(false);
         state = State.Normal;
-        healthSystem = new HealthSystem(100);
+        healthSystem = new HealthSystem(healthAmount);
         healthBar = new World_Bar(transform, new Vector3(0, 10), new Vector3(10, 1.3f), Color.grey, Color.red, 1f, 10000, new World_Bar.Outline { color = Color.black, size = .5f });
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
     }
@@ -128,18 +129,18 @@ public class UnitGridCombat : MonoBehaviour
         //UtilsClass.ShakeCamera(.6f, .1f);
         //GameHandler_GridCombatSystem.Instance.ScreenShake();
 
-        characterBase.PlayShootAnimation(attackDir, (Vector3 vec) =>
-        {
-            Shoot_Flash.AddFlash(vec);
-            WeaponTracer.Create(vec, unitGridCombat.GetPosition() + UtilsClass.GetRandomDir() * UnityEngine.Random.Range(-2f, 4f));
-            unitGridCombat.Damage(this, UnityEngine.Random.Range(4, 12));
-        }, () =>
-        {
-            characterBase.PlayIdleAnim();
-            GetComponent<IMoveVelocity>().Enable();
+        //characterBase.PlayShootAnimation(attackDir, (Vector3 vec) =>
+        //{
+        //    Shoot_Flash.AddFlash(vec);
+        //    WeaponTracer.Create(vec, unitGridCombat.GetPosition() + UtilsClass.GetRandomDir() * UnityEngine.Random.Range(-2f, 4f));
+        //    unitGridCombat.Damage(this, UnityEngine.Random.Range(4, 12));
+        //}, () =>
+        //{
+        //    characterBase.PlayIdleAnim();
+        //    GetComponent<IMoveVelocity>().Enable();
 
-            onShootComplete();
-        });
+        //    onShootComplete();
+        //});
     }
 
     public void Damage(UnitGridCombat attacker, int damageAmount)

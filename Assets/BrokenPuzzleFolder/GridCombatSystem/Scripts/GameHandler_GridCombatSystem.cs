@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using CodeMonkey;
 using CodeMonkey.Utils;
 using GridPathfindingSystem;
@@ -14,6 +15,7 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     [SerializeField] private MovementTilemapVisual movementTilemapVisual;
     [SerializeField] private SpriteTileMapVisual spriteTilemapVisual;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+    [SerializeField] private GameObject cardPanel;
     [SerializeField] private string saveFileName;
     [SerializeField] int mapWidth = 40;
     [SerializeField] int mapHeight = 25;
@@ -44,6 +46,7 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
 
         spriteTilemap.Load(saveFileName);
         gridPathfinding.RaycastWalkable();
+        CardPanelActivation(false);
         //gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
 
         /*
@@ -121,6 +124,16 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 15f;
 
         FunctionTimer.Create(() => { cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f; }, .1f);
+    }
+
+    public void CardPanelActivation(bool isactive)
+    {
+        cardPanel.SetActive(isactive);
+    }
+
+    public bool CardPanelIsActive()
+    {
+        return cardPanel.activeInHierarchy;
     }
 
     public class EmptyGridObject {

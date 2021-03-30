@@ -9,6 +9,8 @@ public class GridCombatSystem : MonoBehaviour {
 
     [SerializeField] private UnitGridCombat[] unitGridCombatArray;
 
+    public float enemyWaitTime = 1.5f;
+
     private State state;
     private UnitGridCombat unitGridCombat;
     private List<UnitGridCombat> playerTeamList;
@@ -20,13 +22,14 @@ public class GridCombatSystem : MonoBehaviour {
 
     private enum State
     {
-        Normal,
+        PlayerTurn,
+        EnemyTurn,
         Waiting
     }
 
     private void Awake()
     {
-        state = State.Normal;
+        state = State.PlayerTurn;
     }
 
     private void Start()
@@ -60,10 +63,12 @@ public class GridCombatSystem : MonoBehaviour {
         if (unitGridCombat == null || unitGridCombat.GetTeam() == UnitGridCombat.Team.Enemy)
         {
             unitGridCombat = GetNextActiveUnit(UnitGridCombat.Team.Player);
+            state = State.PlayerTurn;
         }
         else
         {
             unitGridCombat = GetNextActiveUnit(UnitGridCombat.Team.Enemy);
+            state = State.EnemyTurn;
         }
         //turn on new active enemy light
         unitGridCombat.IsLightActive(true);
@@ -101,6 +106,77 @@ public class GridCombatSystem : MonoBehaviour {
                 return enemyTeamList[enemyTeamActiveUnitIndex];
             }
         }
+    }
+
+    private GridObject ReturnClosestGridObjectToPlayer(UnitGridCombat unit)
+    {
+        Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
+        GridPathfinding gridPathfinding = GameHandler_GridCombatSystem.Instance.gridPathfinding;
+
+        GridObject closestGridObject = null;
+
+        // Get Unit Grid Position X, Y
+        grid.GetXY(unit.GetPosition(), out int unitX, out int unitY);
+
+        //Get Player Grid Position X, Y
+        Vector3 playerPos = GetNextActiveUnit(UnitGridCombat.Team.Player).GetPosition();
+        grid.GetXY(playerPos, out int playerX, out int playerY);
+        //Debug.Log("Player position is " + playerPos);
+        int maxMoveDistance = unit.GetMaxMoveDistance();
+        for (int x = unitX - maxMoveDistance; x <= unitX + maxMoveDistance; x++)
+        {
+            for (int y = unitY - maxMoveDistance; y <= unitY + maxMoveDistance; y++)
+            {
+                //check if the x and y are inside the gridpathfinding
+                if (x >= 0 && y >= 0 && x < gridPathfinding.GetMapWidth() && y < gridPathfinding.GetMapHeight())
+                {
+                    if (grid.GetGridObject(x, y).GetUnitGridCombat() == null)
+                    {
+                        if (gridPathfinding.IsWalkable(x, y))
+                        {
+                            // Position is Walkable
+                            if (gridPathfinding.HasPath(unitX, unitY, x, y))
+                            {
+                                // There is a Path
+                                if (gridPathfinding.GetPath(unitX, unitY, x, y).Count <= maxMoveDistance)
+                                {
+                                    if(closestGridObject != null)
+                                    {
+                                        Vector3Int currentGridPos = grid.GetGridObject(x, y).GetGridObjectPosition();
+                                        Vector3Int closestGridPos = closestGridObject.GetGridObjectPosition();
+                                        if (gridPathfinding.GetPath(currentGridPos.x, currentGridPos.y, playerX, playerY).Count < gridPathfinding.GetPath(closestGridPos.x, closestGridPos.y, playerX, playerY).Count)
+                                        {
+                                            //Debug.Log("Distance from current grid position " + gridPathfinding.GetPath(currentGridPos.x, currentGridPos.y, playerX, playerY).Count);
+                                            //Debug.Log("Distance from current closest grid position " + gridPathfinding.GetPath(closestGridPos.x, closestGridPos.y, playerX, playerY).Count);
+                                            closestGridObject = grid.GetGridObject(x, y);
+                                            //Debug.Log("Current closest grid position is " + closestGridObject.GetGridObjectPosition());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        closestGridObject = grid.GetGridObject(unitX, unitY);
+                                    }
+                                }
+                                else
+                                {
+                                    // Path outside Move Distance!
+                                }
+                            }
+                            else
+                            {
+                                // No valid Path
+                            }
+                        }
+                        else
+                        {
+                            // Position is not Walkable
+                        }
+                    }
+                }
+            }
+        }
+
+        return closestGridObject;
     }
 
     private void UpdateValidMovePositions()
@@ -149,7 +225,7 @@ public class GridCombatSystem : MonoBehaviour {
                                     GameHandler_GridCombatSystem.Instance.GetMovementTilemap().SetTilemapSprite(
                                         x, y, MovementTilemap.TilemapObject.TilemapSprite.Move
                                     );
-
+                                    //set grid object as valid move position
                                     grid.GetGridObject(x, y).SetIsValidMovePosition(true);
                                 }
                                 else
@@ -176,8 +252,8 @@ public class GridCombatSystem : MonoBehaviour {
     {
         switch (state)
         {
-            case State.Normal:
-                if (Input.GetMouseButtonDown(0))
+            case State.PlayerTurn:
+                if (Input.GetMouseButtonDown(0) && !GameHandler_GridCombatSystem.Instance.CardPanelIsActive())
                 {
                     Vector3 position = UtilsClass.GetMouseWorldPosition();
                     Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
@@ -201,8 +277,8 @@ public class GridCombatSystem : MonoBehaviour {
                                     Debug.Log("Attacking");
                                     unitGridCombat.AttackUnit(gridObject.GetUnitGridCombat(), () =>
                                     {
-                                        state = State.Normal;
-                                        TestTurnOver();
+                                        state = State.EnemyTurn;
+                                        TestTurnOver();                                        
                                     });
                                 }
                             }
@@ -245,9 +321,10 @@ public class GridCombatSystem : MonoBehaviour {
                                 //Move towards mouse click position
                                 unitGridCombat.MoveTo(position, () =>
                                 {
-                                    state = State.Normal;
+                                    state = State.EnemyTurn;
                                     UpdateValidMovePositions();
                                     TestTurnOver();
+                                    StartCoroutine(EnemyWaitTime(enemyWaitTime));
                                 });
                             }
                             break;
@@ -266,12 +343,45 @@ public class GridCombatSystem : MonoBehaviour {
                     }
                 }
 
-                //force turn over
-                if (Input.GetKeyDown(KeyCode.Space))
+                break;
+            case State.EnemyTurn:
+
+                if(canMoveThisTurn)
                 {
-                    ForceTurnOver();
+                    Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
+
+                    canMoveThisTurn = false;
+
+                    state = State.Waiting;
+
+                    // Set entire Tilemap to Invisible
+                    GameHandler_GridCombatSystem.Instance.GetMovementTilemap().SetAllTilemapSprite(
+                        MovementTilemap.TilemapObject.TilemapSprite.None
+                    );
+                    
+                    GridObject closestObj = ReturnClosestGridObjectToPlayer(unitGridCombat);
+                    if(closestObj != null)
+                    {
+                        // Remove Unit from current Grid Object
+                        grid.GetGridObject(unitGridCombat.GetPosition()).ClearUnitGridCombat();
+                        // Set Unit on closest Grid Object to player
+                        closestObj.SetUnitGridCombat(unitGridCombat);
+                        //move to closest grid to player available
+                        unitGridCombat.MoveTo(closestObj.GetGridWorldPosition(), () =>
+                        {
+                            state = State.PlayerTurn;
+                            UpdateValidMovePositions();
+                            TestTurnOver();
+                        });
+                    }
+                    else
+                    {
+                        Debug.Log("no object was returned");
+                        ForceTurnOver();
+                    }
                 }
 
+                Debug.Log("Enemy is thinking");
                 break;
             case State.Waiting:
                 //force turn over
@@ -370,21 +480,30 @@ public class GridCombatSystem : MonoBehaviour {
 
     private void TestTurnOver()
     {
-        if (!canMoveThisTurn && !canAttackThisTurn)
+        if (!canMoveThisTurn)// && !canAttackThisTurn)
         {
             // Cannot move or attack, turn over
             ForceTurnOver();
         }
     }
 
-    private void ForceTurnOver()
+    public void ForceTurnOver()
     {
         unitGridCombat.IsLightActive(false);
         SelectNextActiveUnit();
         UpdateValidMovePositions();
+        if(state == State.EnemyTurn)
+        {
+            StartCoroutine(EnemyWaitTime(enemyWaitTime));
+        }        
     }
 
-
+    IEnumerator EnemyWaitTime(float enemyWaitTime)
+    {
+        canMoveThisTurn = false;
+        yield return new WaitForSeconds(enemyWaitTime);
+        canMoveThisTurn = true;
+    }
 
     public class GridObject {
 
@@ -424,6 +543,16 @@ public class GridCombatSystem : MonoBehaviour {
         public UnitGridCombat GetUnitGridCombat()
         {
             return unitGridCombat;
+        }
+
+        public Vector3Int GetGridObjectPosition()
+        {
+            return new Vector3Int(this.x, this.y, 0);
+        }
+
+        public Vector3 GetGridWorldPosition()
+        {
+            return grid.GetWorldPosition(x, y);
         }
 
     }
