@@ -12,5 +12,7 @@ namespace FFL
 
         [SerializeField] Text playerHP;
         [SerializeField] Text enemyHP;
+
+        [SerializeField] List<Button> cardButtons = new List<Button>();
     }
 }
