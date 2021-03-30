@@ -1,18 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class dummy : MonoBehaviour
 {
     public Conversation convo;
     public GameObject text;
+    public string level1;
 
-    private void Update()
+    public void LoadFirstLevel()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            convo.Activate();
-            Destroy(text);
-        }
+        SceneManager.LoadScene(level1);
     }
 }

@@ -3266,6 +3266,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1308346098}
+  enemy: {fileID: 0}
+  playerHP: {fileID: 0}
+  enemyHP: {fileID: 0}
+  cardButtons:
+  - {fileID: 683879906}
+  - {fileID: 1986254600}
+  - {fileID: 541157413}
+  - {fileID: 558092409}
+  - {fileID: 1076140523}
+  - {fileID: 2099370455}
+  - {fileID: 1819411605}
+  - {fileID: 141664039}
+  - {fileID: 140901201}
 --- !u!1 &2060911920
 GameObject:
   m_ObjectHideFlags: 0

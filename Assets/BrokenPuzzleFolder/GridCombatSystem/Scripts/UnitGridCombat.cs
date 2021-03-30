@@ -22,6 +22,14 @@ public class UnitGridCombat : MonoBehaviour
     private State state;
     private World_Bar healthBar;
 
+    //Sound
+    private Vector3 currentPos;
+    private Vector3 lastPos;
+    public AudioSource step1;
+    public AudioSource step2;
+    public AudioSource step3;
+    public AudioSource step4;
+
     public void IsLightActive(bool isActive)
     {
         if(unitLight != null)
@@ -82,6 +90,23 @@ public class UnitGridCombat : MonoBehaviour
             case State.Attacking:
                 break;
         }
+
+        //Sound
+
+        currentPos = gameObject.transform.position;
+        if(state == State.Moving && !step1.isPlaying && !step2.isPlaying && !step3.isPlaying && !step4.isPlaying)
+        {
+            int r = UnityEngine.Random.Range(1, 4);
+            if (r == 1)
+                step1.Play();
+            if (r == 2)
+                step2.Play();
+            if (r == 3)
+                step3.Play();
+            if (r == 4)
+                step4.Play();
+        }
+        lastPos = gameObject.transform.position;
     }
 
     public void SetSelectedVisible(bool visible)
