@@ -108,6 +108,29 @@ public class GridCombatSystem : MonoBehaviour {
         }
     }
 
+    private bool IsPlayerCloseToAttack()
+    {
+        Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
+        GridPathfinding gridPathfinding = GameHandler_GridCombatSystem.Instance.gridPathfinding;
+
+        // Get Unit Grid Position X, Y
+        grid.GetXY(unitGridCombat.GetPosition(), out int unitX, out int unitY);
+        //Get Player Grid Position X, Y
+        Vector3 playerPos = GetNextActiveUnit(UnitGridCombat.Team.Player).GetPosition();
+        grid.GetXY(playerPos, out int playerX, out int playerY);
+        Debug.Log("Player is at " + playerX + "," + playerY + " Enemy is at " + unitX + "," + unitY);
+        int maxAttackDistance = unitGridCombat.GetMaxAttackDistance();
+        Debug.Log(gridPathfinding.GetPath(unitX, unitY, playerX, playerY).Count + " is distance from enemy to player");
+        if(gridPathfinding.GetPath(unitX, unitY, playerX, playerY).Count <= maxAttackDistance)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private GridObject ReturnClosestGridObjectToPlayer(UnitGridCombat unit)
     {
         Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
@@ -273,13 +296,11 @@ public class GridCombatSystem : MonoBehaviour {
                                 {
                                     canAttackThisTurn = false;
                                     // Attack Enemy
-                                    state = State.Waiting;
+                                    //state = State.Waiting;
                                     Debug.Log("Attacking");
-                                    unitGridCombat.AttackUnit(gridObject.GetUnitGridCombat(), () =>
-                                    {
-                                        state = State.EnemyTurn;
-                                        TestTurnOver();                                        
-                                    });
+                                    gridObject.GetUnitGridCombat().Damage(unitGridCombat, 10);
+                                    //state = State.EnemyTurn;
+                                    TestTurnOver();
                                 }
                             }
                             else
@@ -321,14 +342,13 @@ public class GridCombatSystem : MonoBehaviour {
                                 //Move towards mouse click position
                                 unitGridCombat.MoveTo(position, () =>
                                 {
-                                    state = State.EnemyTurn;
+                                    //state = State.EnemyTurn;
                                     UpdateValidMovePositions();
                                     TestTurnOver();
-                                    StartCoroutine(EnemyWaitTime(enemyWaitTime));
+                                    //StartCoroutine(EnemyWaitTime(enemyWaitTime));
                                 });
                             }
                             break;
-
                         }
                         else
                         {
@@ -369,9 +389,22 @@ public class GridCombatSystem : MonoBehaviour {
                         //move to closest grid to player available
                         unitGridCombat.MoveTo(closestObj.GetGridWorldPosition(), () =>
                         {
-                            state = State.PlayerTurn;
-                            UpdateValidMovePositions();
-                            TestTurnOver();
+                            canAttackThisTurn = IsPlayerCloseToAttack();
+                            if (canAttackThisTurn)
+                            {
+                                canAttackThisTurn = false;
+
+                                UnitGridCombat playerUnit = GetNextActiveUnit(UnitGridCombat.Team.Player);
+
+                                playerUnit.Damage(unitGridCombat, 10);
+                                Debug.Log("Damaged player");
+                                UpdateValidMovePositions();
+                                StartCoroutine(EnemyTurnFinished(enemyWaitTime));
+                            }
+                            else
+                            {
+                                StartCoroutine(EnemyTurnFinished(enemyWaitTime));
+                            }
                         });
                     }
                     else
@@ -480,7 +513,7 @@ public class GridCombatSystem : MonoBehaviour {
 
     private void TestTurnOver()
     {
-        if (!canMoveThisTurn)// && !canAttackThisTurn)
+        if (!canMoveThisTurn && !canAttackThisTurn)
         {
             // Cannot move or attack, turn over
             ForceTurnOver();
@@ -492,10 +525,18 @@ public class GridCombatSystem : MonoBehaviour {
         unitGridCombat.IsLightActive(false);
         SelectNextActiveUnit();
         UpdateValidMovePositions();
+        if(unitGridCombat.GetTeam() == UnitGridCombat.Team.Enemy)
+        {
+            state = State.EnemyTurn;
+        }
+        else if(unitGridCombat.GetTeam() == UnitGridCombat.Team.Player)
+        {
+            state = State.PlayerTurn;
+        }
         if(state == State.EnemyTurn)
         {
             StartCoroutine(EnemyWaitTime(enemyWaitTime));
-        }        
+        }
     }
 
     IEnumerator EnemyWaitTime(float enemyWaitTime)
@@ -503,6 +544,14 @@ public class GridCombatSystem : MonoBehaviour {
         canMoveThisTurn = false;
         yield return new WaitForSeconds(enemyWaitTime);
         canMoveThisTurn = true;
+    }
+
+    IEnumerator EnemyTurnFinished(float enemyFinishTurnTime)
+    {
+        yield return new WaitForSeconds(enemyFinishTurnTime);
+        state = State.PlayerTurn;
+        GameHandler_GridCombatSystem.Instance.CardPanelActivation(true);        
+        TestTurnOver();
     }
 
     public class GridObject {

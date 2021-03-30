@@ -9,8 +9,11 @@ public class UnitGridCombat : MonoBehaviour
 {
     [SerializeField] private Team team;
     [SerializeField] private int maxMoveDistance = 5;
+    [SerializeField] private int maxAttackDistance = 2;
     [SerializeField] private Light2D unitLight;
     [SerializeField] private int healthAmount = 100;
+    [SerializeField] private int attackStat = 3;
+    [SerializeField] private int defenceStat = 3;
 
     //private Character_Base characterBase;
     private HealthSystem healthSystem;
@@ -146,7 +149,7 @@ public class UnitGridCombat : MonoBehaviour
     public void Damage(UnitGridCombat attacker, int damageAmount)
     {
         Vector3 bloodDir = (GetPosition() - attacker.GetPosition()).normalized;
-        Blood_Handler.SpawnBlood(GetPosition(), bloodDir);
+        //Blood_Handler.SpawnBlood(GetPosition(), bloodDir);
 
         DamagePopup.Create(GetPosition(), damageAmount, false);
         healthSystem.Damage(damageAmount);
@@ -177,6 +180,11 @@ public class UnitGridCombat : MonoBehaviour
     public int GetMaxMoveDistance()
     {
         return maxMoveDistance;
+    }
+
+    public int GetMaxAttackDistance()
+    {
+        return maxAttackDistance;
     }
 
     public bool IsEnemy(UnitGridCombat unitGridCombat)

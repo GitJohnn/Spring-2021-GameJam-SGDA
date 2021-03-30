@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class CardDisplay : MonoBehaviour
 {
@@ -15,11 +17,18 @@ public class CardDisplay : MonoBehaviour
 
     public Text attackText;
     public Text speedText;
-    public Text defenceText;
+    public Text defenceText;    
+
+    private Selectable selectable;
 
     // Start is called before the first frame update
     void Start()
     {
+        //OnSelectCard.AddListener()
+        //set Selectable
+        selectable = GetComponent<Selectable>();
+
+        //Set Card properties
         nameText.text = card.name;
         descriptionText.text = card.description;
 
@@ -28,7 +37,13 @@ public class CardDisplay : MonoBehaviour
         attackText.text  =  card.AttackBoost.ToString();
         speedText.text   =  card.SpeedBoost.ToString();
         defenceText.text =  card.DefenseBoost.ToString();
+    }
 
+    public void DeActivateCard()
+    {        
+        CardManager.Instance.AddUnUsedCard();
+        GameHandler_GridCombatSystem.Instance.CardPanelActivation(false);
+        this.gameObject.SetActive(false);
     }
 
 }
