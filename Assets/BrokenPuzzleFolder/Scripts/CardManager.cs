@@ -38,13 +38,13 @@ public class CardManager : MonoBehaviour
     public void AddCardIndex(int index)
     {
         GameObject newCard = Instantiate(cards[index], cardHolder.transform);
-        Debug.Log(newCard.name);
+        //Debug.Log(newCard.name);
     }
 
     public void AddUnUsedCard()
     {
         int currentIndex = availableIndex[Random.Range(0, availableIndex.Count - 1)];
-        Debug.Log(currentIndex);
+        //Debug.Log(currentIndex);
         AddCardIndex(currentIndex);
         availableIndex.Remove(currentIndex);
     }

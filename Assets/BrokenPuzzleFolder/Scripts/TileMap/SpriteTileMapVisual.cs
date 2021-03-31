@@ -27,6 +27,11 @@ public class SpriteTileMapVisual : MonoBehaviour
         tilemap.OnLoaded += TileMap_OnLoaded;
     }
 
+    public Sprite GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite spriteType)
+    {
+        return tileDictionary[spriteType];
+    }
+
     private void TileMap_OnLoaded(object sender, System.EventArgs e)
     {
         updateMesh = true;

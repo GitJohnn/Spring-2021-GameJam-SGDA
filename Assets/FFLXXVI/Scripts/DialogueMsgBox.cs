@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class DialogueMsgBox : MonoBehaviour
 {
-    public Text speaker;
-    public Text dialogue;
+    public TextMeshProUGUI speaker;
+    public TextMeshProUGUI dialogue;
     public GameObject namePanel;
     public GameObject textPanel;
     public Conversation convo;
@@ -15,10 +16,7 @@ public class DialogueMsgBox : MonoBehaviour
     {
         convo.pointer++;
         convo.boxes[convo.pointer - 1] = null;
-
-
         
-
         try
         {
             if (convo.boxes[convo.pointer] == null)

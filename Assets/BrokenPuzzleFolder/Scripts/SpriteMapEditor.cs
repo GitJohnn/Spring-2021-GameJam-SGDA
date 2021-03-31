@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using CodeMonkey.Utils;
 using CodeMonkey;
 
-public class Testing : MonoBehaviour
+public class SpriteMapEditor : MonoBehaviour
 {    
     [SerializeField] SpriteTileMapVisual spriteTilemapVisual;
 
@@ -13,6 +14,14 @@ public class Testing : MonoBehaviour
     public int cellSize = 10;
     public string saveFileName;
 
+    [SerializeField] Image noneSprite;
+    [SerializeField] Image pathSprite;
+    [SerializeField] Image grassSprite;
+    [SerializeField] Image dirtSprite;
+    [SerializeField] Image roadSprite;
+    [SerializeField] Image woodSprite;
+    [SerializeField] Image obstacleSprite;
+
     private SpriteTileMap spriteTilemap;
     private SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite tilemapSprite;
     
@@ -20,13 +29,13 @@ public class Testing : MonoBehaviour
     {
         spriteTilemap = new SpriteTileMap(width, heigh, cellSize, Vector3.zero);
 
-        //spriteTilemap.SetTileMapVisual(spriteTilemapVisual);
+        spriteTilemap.SetTileMapVisual(spriteTilemapVisual);
+        SetSprites();
         //spriteTilemap.Load(saveFileName);
 
         //GameHandler_GridCombatSystem.Instance.gridPathfinding.RaycastWalkable();
         //GameHandler_GridCombatSystem.Instance.gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
     }
-
 
     private void Update()
     {
@@ -59,26 +68,26 @@ public class Testing : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.None;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Path;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Grass;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Dirt;
-            CMDebug.TextPopupMouse(tilemapSprite.ToString());
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.None;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Path;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Grass;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    tilemapSprite = SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Dirt;
+        //    CMDebug.TextPopupMouse(tilemapSprite.ToString());
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -91,6 +100,17 @@ public class Testing : MonoBehaviour
             spriteTilemap.Load(saveFileName);
             CMDebug.TextPopupMouse("Loaded!");
         }
+    }
+
+    public void SetSprites()
+    {
+        noneSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.None);
+        pathSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Path);
+        grassSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Grass);
+        dirtSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Dirt);
+        roadSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Road);
+        woodSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Wood);
+        obstacleSprite.sprite = spriteTilemapVisual.GetSprite(SpriteTileMap.SpriteTileMapObject.GroundTileMapSprite.Obstacle);
     }
 
     public void SwitchTilemapSprite(string tileName)

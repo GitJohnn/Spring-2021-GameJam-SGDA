@@ -22,7 +22,7 @@ public class Conversation : MonoBehaviour
 
         while (lineToParse != null)
         {
-            Debug.Log(lineToParse);
+            //Debug.Log(lineToParse);
             DialogueMsgBox newBox = Instantiate(dialogueBox).GetComponent<DialogueMsgBox>();
 
             string[] tokens = lineToParse.Split(':');

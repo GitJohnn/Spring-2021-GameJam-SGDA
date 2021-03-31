@@ -180,7 +180,8 @@ public class UnitGridCombat : MonoBehaviour
         healthSystem.Damage(damageAmount);
         if (healthSystem.IsDead()) {
             FlyingBody.Create(GameAssets.i.pfEnemyFlyingBody, GetPosition(), bloodDir);
-            Destroy(gameObject);
+            //Destroy(gameObject);\
+            gameObject.SetActive(false);
         } else {
             // Knockback
             //transform.position += bloodDir * 5f;
@@ -215,6 +216,16 @@ public class UnitGridCombat : MonoBehaviour
     public bool IsEnemy(UnitGridCombat unitGridCombat)
     {
         return unitGridCombat.GetTeam() != team;
+    }
+
+    public int GetAttackStat()
+    {
+        return attackStat;
+    }
+
+    public int GetDefenceStat()
+    {
+        return defenceStat;
     }
 
 }

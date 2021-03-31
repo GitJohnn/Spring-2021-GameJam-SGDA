@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8254813861816906904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8254813861816906910}
+  - component: {fileID: 8254813861816906911}
+  m_Layer: 0
+  m_Name: SpriteTilemapVisualLevel1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8254813861816906910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254813861816906904}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 162.99658, y: 78.92892, z: -490.125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8254813861816906911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254813861816906904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abdb024b531cfe94ca32164ae98fb037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilesetObjectArray:
+  - groundTilemapSprite: 0
+    sprite: {fileID: 21300000, guid: d231e8920e1103249a902a7c9f07b0ba, type: 3}
+  - groundTilemapSprite: 1
+    sprite: {fileID: 2248341161697184351, guid: 3d36217a7781be343be0b8d8ff6ce96c,
+      type: 3}
+  - groundTilemapSprite: 2
+    sprite: {fileID: 1053382856023007719, guid: 3d36217a7781be343be0b8d8ff6ce96c,
+      type: 3}
+  - groundTilemapSprite: 3
+    sprite: {fileID: 3200449477785911626, guid: 3d36217a7781be343be0b8d8ff6ce96c,
+      type: 3}
+  - groundTilemapSprite: 4
+    sprite: {fileID: 8703620159196730256, guid: 157e9ef573c4eda48a4ca9da91b99f36,
+      type: 3}
+  - groundTilemapSprite: 5
+    sprite: {fileID: 5353508324160400147, guid: 3d36217a7781be343be0b8d8ff6ce96c,
+      type: 3}
+  - groundTilemapSprite: 6
+    sprite: {fileID: -761346436568728119, guid: 157e9ef573c4eda48a4ca9da91b99f36,
+      type: 3}

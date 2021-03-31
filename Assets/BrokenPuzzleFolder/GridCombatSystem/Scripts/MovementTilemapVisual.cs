@@ -17,7 +17,6 @@ using UnityEngine;
 public class MovementTilemapVisual : MonoBehaviour {
     
     public Texture moveTexture;
-    public Texture redTexture;
 
     [System.Serializable]
     public struct TilemapSpriteUV {
