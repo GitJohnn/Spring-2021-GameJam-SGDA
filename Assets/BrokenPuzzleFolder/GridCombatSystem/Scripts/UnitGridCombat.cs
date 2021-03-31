@@ -328,6 +328,11 @@ public class UnitGridCombat : MonoBehaviour
         hasthorns = value;
     }
 
+    public int GetHealthAmount()
+    {
+        return healthAmount;
+    }
+
     public bool IsDead()
     {
         return healthSystem.IsDead();

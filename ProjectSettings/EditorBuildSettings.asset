@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/BrokenPuzzleFolder/Scenes/Level1.unity
     guid: 5512dd5cabeaaa149a1f1806b54ee13d
+  - enabled: 1
+    path: Assets/BrokenPuzzleFolder/Scenes/Level2.unity
+    guid: 14dce4bfd67bede48902073ed7546be5
+  - enabled: 1
+    path: Assets/BrokenPuzzleFolder/Scenes/Level3.unity
+    guid: d5580aabbf8fe9d4593435e605c5b93b
+  - enabled: 1
+    path: Assets/BrokenPuzzleFolder/Scenes/EndCredits.unity
+    guid: a191e1f28423947469fcab6e802d3703
   m_configObjects: {}

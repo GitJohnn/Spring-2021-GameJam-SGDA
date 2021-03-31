@@ -6,6 +6,7 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 using GridPathfindingSystem;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class GameHandler_GridCombatSystem : MonoBehaviour {
 
@@ -16,6 +17,8 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     [SerializeField] private SpriteTileMapVisual spriteTilemapVisual;
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] private GameObject cardPanel;
+    [SerializeField] private Image GameOverPanel;
+    [SerializeField] private Image YouWinPanel;
     [SerializeField] private string saveFileName;
     [SerializeField] int mapWidth = 40;
     [SerializeField] int mapHeight = 25;
@@ -30,7 +33,8 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     private void Awake()
     {
         Instance = this;
-
+        GameOverPanel.gameObject.SetActive(false);
+        YouWinPanel.gameObject.SetActive(false);
         grid = new Grid<GridCombatSystem.GridObject>(mapWidth, mapHeight, cellSize, origin, (Grid<GridCombatSystem.GridObject> g, int x, int y) => new GridCombatSystem.GridObject(g, x, y));
 
         gridPathfinding = new GridPathfinding(origin + new Vector3(1, 1) * cellSize * .5f, new Vector3(mapWidth, mapHeight) * cellSize, cellSize);
@@ -103,6 +107,16 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         cinemachineFollowTransform.position += moveDir * moveSpeed * Time.deltaTime;
     }
 
+    public void ActivateGameOver()
+    {
+        GameOverPanel.gameObject.SetActive(true);
+    }
+
+    public void ActivateYouWin()
+    {
+        YouWinPanel.gameObject.SetActive(true);
+    }
+
     public Grid<GridCombatSystem.GridObject> GetGrid()
     {
         return grid;
@@ -134,6 +148,11 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     public bool CardPanelIsActive()
     {
         return cardPanel.activeInHierarchy;
+    }
+
+    public void SwitchScene(int value)
+    {
+        SceneManager.LoadScene(value);
     }
 
     public class EmptyGridObject {
