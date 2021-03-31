@@ -19,12 +19,13 @@ public class UnitGridCombat : MonoBehaviour
     private World_Bar healthBar;
 
     //Sound
-    private Vector3 currentPos;
-    private Vector3 lastPos;
     public AudioSource step1;
     public AudioSource step2;
     public AudioSource step3;
     public AudioSource step4;
+    public AudioSource hit1;
+    public AudioSource hit2;
+    public AudioSource hit3;
 
 
     //gameplay stats
@@ -106,20 +107,19 @@ public class UnitGridCombat : MonoBehaviour
 
         //Sound
 
-        currentPos = gameObject.transform.position;
+
         if(state == State.Moving && !step1.isPlaying && !step2.isPlaying && !step3.isPlaying && !step4.isPlaying)
         {
-            int r = UnityEngine.Random.Range(1, 4);
+            int r = UnityEngine.Random.Range(1, 5);
             if (r == 1)
                 step1.Play();
-            if (r == 2)
+            else if (r == 2)
                 step2.Play();
-            if (r == 3)
+            else if (r == 3)
                 step3.Play();
-            if (r == 4)
+            else
                 step4.Play();
         }
-        lastPos = gameObject.transform.position;
     }
 
     public void SetSelectedVisible(bool visible)
@@ -198,6 +198,22 @@ public class UnitGridCombat : MonoBehaviour
         } else {
             // Knockback
             //transform.position += bloodDir * 5f;
+        }
+
+        int soundRand = UnityEngine.Random.Range(1, 4);
+        {
+            if(soundRand == 1)
+            {
+                hit1.Play();
+            }
+            else if (soundRand == 2)
+            {
+                hit2.Play();
+            }
+            else
+            {
+                hit3.Play();
+            }
         }
     }
 
