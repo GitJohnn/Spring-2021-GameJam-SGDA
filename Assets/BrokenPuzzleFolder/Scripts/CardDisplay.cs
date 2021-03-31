@@ -20,15 +20,17 @@ public class CardDisplay : MonoBehaviour
     public Text defenceText;    
 
     private EventTrigger eventTrigger;
-    private PointerEventData pointerData;
+    private Selectable selectable;
+
+    private int cardIndex = -1;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //OnSelectCard.AddListener()
         //set Selectable
         eventTrigger = GetComponent<EventTrigger>();
-
+        selectable = GetComponent<Selectable>();
         //Set Card properties
         nameText.text = card.name;
         descriptionText.text = card.description;
@@ -42,9 +44,20 @@ public class CardDisplay : MonoBehaviour
 
     public void DeActivateCard()
     {        
-        CardManager.Instance.AddUnUsedCard();
+        CardManager.Instance.AddUnUsedCard(cardIndex);
         GameHandler_GridCombatSystem.Instance.CardPanelActivation(false);
         this.gameObject.SetActive(false);
+    }
+
+    public void MakeCardUsable(bool value)
+    {
+        selectable.interactable = value;
+        eventTrigger.enabled = value;
+    }
+
+    public void SetCardIndex(int value)
+    {
+        cardIndex = value;
     }
 
 }

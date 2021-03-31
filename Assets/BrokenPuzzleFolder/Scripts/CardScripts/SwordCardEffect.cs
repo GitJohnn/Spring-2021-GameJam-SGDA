@@ -9,5 +9,6 @@ public class SwordCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.IncreaseAttack(3, "Sword");
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

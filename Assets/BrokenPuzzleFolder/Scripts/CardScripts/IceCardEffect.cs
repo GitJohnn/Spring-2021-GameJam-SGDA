@@ -9,5 +9,6 @@ public class IceCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         gridCombatSystem.UsingCardType(GridCombatSystem.ElementCardUsed.Ice);
         Debug.Log("Using ice card type");
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69cf9dc88bca75b4a9005f05a3887533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueBox: {fileID: 192030904516108112, guid: 285a4bb84c52fa849be8d025cad861c8,
+  dialogueBox: {fileID: 292286673012592522, guid: 285a4bb84c52fa849be8d025cad861c8,
     type: 3}
   fileName: Opening Convo
   onConvoEnd:

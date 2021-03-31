@@ -11,7 +11,9 @@ public class CardManager : MonoBehaviour
     public GameObject cardHolder;
 
     private List<int> availableIndex = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-    private List<int> usedIndex = new List<int>();    
+    private List<int> usedIndex = new List<int>();
+
+    private List<CardDisplay> activeCards = new List<CardDisplay>();
 
     private void Awake()
     {
@@ -38,15 +40,19 @@ public class CardManager : MonoBehaviour
     public void AddCardIndex(int index)
     {
         GameObject newCard = Instantiate(cards[index], cardHolder.transform);
+        CardDisplay newCardDisplay = newCard.GetComponent<CardDisplay>();
+        newCardDisplay.SetCardIndex(index);
+        activeCards.Add(newCardDisplay);
         //Debug.Log(newCard.name);
     }
 
-    public void AddUnUsedCard()
+    public void AddUnUsedCard(int removeIndex)
     {
         int currentIndex = availableIndex[Random.Range(0, availableIndex.Count - 1)];
         //Debug.Log(currentIndex);
         AddCardIndex(currentIndex);
         availableIndex.Remove(currentIndex);
+        activeCards.Remove(cards[removeIndex].GetComponent<CardDisplay>());
     }
 
     private void Update()
@@ -54,6 +60,14 @@ public class CardManager : MonoBehaviour
         if(availableIndex.Count <= 2)
         {
             ReFillIndex();
+        }
+    }
+
+    public void LoopActiveCards(bool value)
+    {
+        foreach(CardDisplay card in activeCards)
+        {
+            card.MakeCardUsable(value);
         }
     }
 

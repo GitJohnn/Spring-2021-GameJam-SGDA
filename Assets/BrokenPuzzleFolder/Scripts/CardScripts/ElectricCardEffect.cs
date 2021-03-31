@@ -9,5 +9,6 @@ public class ElectricCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         gridCombatSystem.UsingCardType(GridCombatSystem.ElementCardUsed.Thunder);
         Debug.Log("Using Electric Card");
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

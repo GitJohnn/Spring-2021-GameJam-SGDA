@@ -856,7 +856,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1007199534645312996, guid: 132b356a2532ef844a002ead86821fb7,
+  m_Sprite: {fileID: -2118750432763417123, guid: 132b356a2532ef844a002ead86821fb7,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1955,7 +1955,7 @@ PrefabInstance:
     - target: {fileID: 2554990610533135095, guid: ef9982d515363ed49b8dd7c9a4c0818b,
         type: 3}
       propertyPath: fileName
-      value: LV1 convo
+      value: lvl2Convo
       objectReference: {fileID: 0}
     - target: {fileID: 2554990610533135095, guid: ef9982d515363ed49b8dd7c9a4c0818b,
         type: 3}
@@ -2201,7 +2201,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2118750432763417123, guid: 132b356a2532ef844a002ead86821fb7,
+  m_Sprite: {fileID: -8533709669005334204, guid: 132b356a2532ef844a002ead86821fb7,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2753,7 +2753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   unitLight: {fileID: 1294518791}
-  healthAmount: 5
+  healthAmount: 7
   step1: {fileID: 1201425738}
   step2: {fileID: 1201425742}
   step3: {fileID: 1201425741}
@@ -2761,8 +2761,8 @@ MonoBehaviour:
   hit1: {fileID: 1201425745}
   hit2: {fileID: 1201425744}
   hit3: {fileID: 1201425743}
-  attackStat: 2
-  defenceStat: 2
+  attackStat: 3
+  defenceStat: 3
   maxMoveDistance: 5
   maxAttackDistance: 3
 --- !u!114 &1201425735
@@ -3632,7 +3632,7 @@ PrefabInstance:
     - target: {fileID: 3701273218562383093, guid: e996aad426ca229479d8f6ef5300eae3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3701273218562383094, guid: e996aad426ca229479d8f6ef5300eae3,
         type: 3}
@@ -4735,7 +4735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   unitLight: {fileID: 1603077555}
-  healthAmount: 7
+  healthAmount: 10
   step1: {fileID: 1601887575}
   step2: {fileID: 1601887579}
   step3: {fileID: 1601887578}
@@ -4743,9 +4743,9 @@ MonoBehaviour:
   hit1: {fileID: 1601887582}
   hit2: {fileID: 1601887581}
   hit3: {fileID: 1601887580}
-  attackStat: 2
+  attackStat: 4
   defenceStat: 3
-  maxMoveDistance: 5
+  maxMoveDistance: 6
   maxAttackDistance: 3
 --- !u!114 &1601887572
 MonoBehaviour:
@@ -4897,7 +4897,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1601887570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 135, y: 25, z: 0}
+  m_LocalPosition: {x: 115, y: 25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 793922938}
@@ -5870,7 +5870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1672517119
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7174,7 +7174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   unitLight: {fileID: 8207180887391118947}
-  healthAmount: 5
+  healthAmount: 7
   step1: {fileID: 8207180888300273936}
   step2: {fileID: 8207180888300273939}
   step3: {fileID: 8207180888300273938}
@@ -7182,8 +7182,8 @@ MonoBehaviour:
   hit1: {fileID: 8207180888300273944}
   hit2: {fileID: 8207180888300273942}
   hit3: {fileID: 8207180888300273940}
-  attackStat: 2
-  defenceStat: 2
+  attackStat: 3
+  defenceStat: 3
   maxMoveDistance: 5
   maxAttackDistance: 3
 --- !u!114 &4115997058290992605
@@ -9145,7 +9145,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8207180888300273935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 135, y: 15, z: 0}
+  m_LocalPosition: {x: 95, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8207180888944285796}
@@ -9322,7 +9322,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1007199534645312996, guid: 132b356a2532ef844a002ead86821fb7,
+  m_Sprite: {fileID: -2118750432763417123, guid: 132b356a2532ef844a002ead86821fb7,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

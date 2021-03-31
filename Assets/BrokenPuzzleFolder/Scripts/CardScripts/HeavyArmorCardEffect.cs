@@ -9,5 +9,6 @@ public class HeavyArmorCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.IncreaseDefence(2);
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

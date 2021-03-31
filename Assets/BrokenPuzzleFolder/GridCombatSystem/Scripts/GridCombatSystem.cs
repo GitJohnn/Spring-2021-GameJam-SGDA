@@ -29,7 +29,7 @@ public class GridCombatSystem : MonoBehaviour {
 
     private bool playerLost = false;
     private bool playerWon = false;
-
+    private int deadEnemyCounter = 0;
     public enum ElementCardUsed
     {
         None,
@@ -138,8 +138,7 @@ public class GridCombatSystem : MonoBehaviour {
         // Get Unit Grid Position X, Y
         grid.GetXY(unitGridCombat.GetPosition(), out int unitX, out int unitY);
         //Get Player Grid Position X, Y
-        Vector3 playerPos = GetNextActiveUnit(UnitGridCombat.Team.Player).GetPosition();
-        grid.GetXY(playerPos, out int playerX, out int playerY);
+        grid.GetXY(playerUnitGridCombat.GetPosition(), out int playerX, out int playerY);
         Debug.Log("Player is at " + playerX + "," + playerY + " Enemy is at " + unitX + "," + unitY);
         int maxAttackDistance = unitGridCombat.GetMaxAttackDistance();
         //Debug.Log(gridPathfinding.GetPath(unitX, unitY, playerX, playerY).Count + " is distance from enemy to player");
@@ -420,10 +419,14 @@ public class GridCombatSystem : MonoBehaviour {
         switch (state)
         {
             case State.PlayerTurn:
+                //check if the player has won and finish the game
+                if(deadEnemyCounter == 3 || playerUnitGridCombat.IsDead())
+                {
+                    ForceTurnOver();
+                }
 
                 if (Input.GetMouseButtonDown(0) && turnCanStart)
                 {
-
                     Vector3 position = UtilsClass.GetMouseWorldPosition();
                     Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
                     GridObject gridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
@@ -445,14 +448,18 @@ public class GridCombatSystem : MonoBehaviour {
                                     {
                                         case ElementCardUsed.Fire:
                                             gridObject.GetUnitGridCombat().BurnUnit();
+                                            CodeMonkey.CMDebug.TextPopup("Unit has been Burned", gridObject.GetGridWorldPosition());
                                             break;
                                         case ElementCardUsed.Thunder:
                                             gridObject.GetUnitGridCombat().ShockUnit();
+                                            CodeMonkey.CMDebug.TextPopup("Unit has been Stunned", gridObject.GetGridWorldPosition());
                                             break;
                                         case ElementCardUsed.Ice:
                                             gridObject.GetUnitGridCombat().SlowUnit();
+                                            CodeMonkey.CMDebug.TextPopup("Unit has been Slowed", gridObject.GetGridWorldPosition());
                                             break;
                                     }
+                                    //CardManager.Instance.LoopActiveCards(false);
                                     isUsingCardEffect = false;
                                     elementCardType = ElementCardUsed.None;
                                     break;
@@ -468,6 +475,10 @@ public class GridCombatSystem : MonoBehaviour {
                                         //state = State.Waiting;
                                         Debug.Log("Attacking");
                                         gridObject.GetUnitGridCombat().Damage(Mathf.Max(0, Mathf.Abs(unitGridCombat.GetAttackStat() - gridObject.GetUnitGridCombat().GetDefenceStat())));
+                                        if (gridObject.GetUnitGridCombat().IsDead())
+                                        {
+                                            deadEnemyCounter++;
+                                        }
                                         //state = State.EnemyTurn;
                                         TestTurnOver();
                                     }
@@ -506,11 +517,11 @@ public class GridCombatSystem : MonoBehaviour {
                                 );
 
                                 // Remove Unit from current Grid Object
-                                grid.GetGridObject(unitGridCombat.GetPosition()).ClearUnitGridCombat();
+                                grid.GetGridObject(playerUnitGridCombat.GetPosition()).ClearUnitGridCombat();
                                 // Set Unit on target Grid Object
-                                gridObject.SetUnitGridCombat(unitGridCombat);
+                                gridObject.SetUnitGridCombat(playerUnitGridCombat);
                                 //Move towards mouse click position
-                                unitGridCombat.MoveTo(position, () =>
+                                playerUnitGridCombat.MoveTo(position, () =>
                                 {
                                     state = State.PlayerTurn;
                                     UpdateValidMovePositions();
@@ -536,7 +547,13 @@ public class GridCombatSystem : MonoBehaviour {
                 break;
             case State.EnemyTurn:
 
-                if (canMoveThisTurn && !unitGridCombat.IsShocked())
+                if (unitGridCombat.IsBurned())
+                {
+                    unitGridCombat.Damage(1);
+                }
+                canMoveThisTurn = unitGridCombat.IsShocked() ? false : true;
+
+                if (canMoveThisTurn)
                 {
                     Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
 
@@ -579,7 +596,7 @@ public class GridCombatSystem : MonoBehaviour {
                         ForceTurnOver();
                     }
                 }
-
+                ForceTurnOver();
                 Debug.Log("Enemy is thinking");
                 break;
             case State.Waiting:
@@ -613,7 +630,7 @@ public class GridCombatSystem : MonoBehaviour {
             GameHandler_GridCombatSystem.Instance.ActivateGameOver();
         }
         //Check if player won
-        if(enemyTeamList.Count == 0)
+        if(deadEnemyCounter == 3)
         {
             //player Won
             playerWon = true;
@@ -622,10 +639,10 @@ public class GridCombatSystem : MonoBehaviour {
         }
         if (!playerLost && !playerWon)
         {
-            if(unitGridCombat.GetTeam() == UnitGridCombat.Team.Enemy && unitGridCombat.IsBurned())
-            {
-                unitGridCombat.Damage(1);
-            }
+            //if(unitGridCombat.GetTeam() == UnitGridCombat.Team.Enemy && unitGridCombat.IsBurned())
+            //{
+            //    unitGridCombat.Damage(1);
+            //}
             unitGridCombat.IsLightActive(false);
             SelectNextActiveUnit();
             UpdateValidMovePositions();
@@ -638,6 +655,7 @@ public class GridCombatSystem : MonoBehaviour {
             {
                 state = State.PlayerTurn;
                 PlayerTurnCanStart(true);
+                CardManager.Instance.LoopActiveCards(true);
             }
             if (state == State.EnemyTurn)
             {
@@ -665,6 +683,11 @@ public class GridCombatSystem : MonoBehaviour {
         state = State.PlayerTurn;
         GameHandler_GridCombatSystem.Instance.CardPanelActivation(true);        
         TestTurnOver();
+    }
+
+    public UnitGridCombat GetPlayerUnit()
+    {
+        return playerUnitGridCombat;
     }
 
     public void PlayerTurnCanStart(bool value)

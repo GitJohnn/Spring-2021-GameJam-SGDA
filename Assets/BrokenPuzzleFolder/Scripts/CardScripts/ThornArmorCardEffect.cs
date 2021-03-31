@@ -9,5 +9,6 @@ public class ThornArmorCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.HasThorns(true);
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

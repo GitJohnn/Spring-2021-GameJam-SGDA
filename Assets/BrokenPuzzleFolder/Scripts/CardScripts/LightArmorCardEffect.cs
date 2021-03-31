@@ -9,5 +9,6 @@ public class LightArmorCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.IncreaseDefence(1);
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

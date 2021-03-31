@@ -10,5 +10,6 @@ public class BowCardEffect : CardEffect
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.IncreaseAttack(1 , "Bow");
         playerUnit.IncreaseDistance(3);
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

@@ -10,6 +10,6 @@ public class LanceCardEffect : CardEffect
         UnitGridCombat playerUnit = gridCombatSystem.GetNextActiveUnit(UnitGridCombat.Team.Player);
         playerUnit.IncreaseAttack(2, "Lance");
         playerUnit.IncreaseDistance(1);
-
+        CardManager.Instance.LoopActiveCards(false);
     }
 }

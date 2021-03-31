@@ -9,5 +9,6 @@ public class FireCardEffect : CardEffect
         GridCombatSystem gridCombatSystem = GameObject.FindObjectOfType<GridCombatSystem>();
         gridCombatSystem.UsingCardType(GridCombatSystem.ElementCardUsed.Fire);
         Debug.Log("Use card effect");
+        CardManager.Instance.LoopActiveCards(false);
     }
 }
