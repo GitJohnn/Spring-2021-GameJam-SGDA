@@ -100,7 +100,8 @@ public class SpriteTileMap : MonoBehaviour
             this.groundSpriteObject.transform.localScale *= grid.GetCellSize();
             this.groundSpriteRenderer = groundSpriteObject.GetComponent<SpriteRenderer>();
             this.groundSpriteRenderer.spriteSortPoint = SpriteSortPoint.Pivot;
-            this.groundSpriteRenderer.sortingOrder = -2;
+            //this.groundSpriteRenderer.la
+            this.groundSpriteRenderer.sortingOrder = 0;
         }
 
         public void SetTileMapSprite(GroundTileMapSprite tilemapSprite)
@@ -131,7 +132,7 @@ public class SpriteTileMap : MonoBehaviour
             this.obstacleSpriteObject.GetComponent<BoxCollider2D>().offset = Vector2.one * 0.5f;
             this.obstacleSpriteRenderer = this.obstacleSpriteObject.GetComponent<SpriteRenderer>();
             this.obstacleSpriteRenderer.spriteSortPoint = SpriteSortPoint.Pivot;
-            this.obstacleSpriteRenderer.sortingOrder = -1;
+            this.obstacleSpriteRenderer.sortingOrder = 1;
             if (grid != null)
             {
                 grid.TriggerGridObjectChanged(x, y);

@@ -20,7 +20,7 @@ public static class SaveSystem {
     private const string SAVE_EXTENSION = "txt";
 
     private static readonly string SAVE_FOLDER = Application.dataPath + "/Saves/";
-    private static bool isInit = false;
+    private static bool isInit = true;
 
     public static void Init() {
         if (!isInit) {

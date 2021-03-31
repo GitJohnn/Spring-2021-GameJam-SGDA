@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 292286673012592523}
   - component: {fileID: 5010649506472124103}
   - component: {fileID: 7039911693586321206}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2, y: -109.79999}
+  m_AnchoredPosition: {x: 2, y: -109.799805}
   m_SizeDelta: {x: -29.99762, y: -413.6443}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &292286674149046616
@@ -491,7 +491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 387, y: -111.74}
+  m_AnchoredPosition: {x: 387, y: -111.740234}
   m_SizeDelta: {x: 530.37506, y: 156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &478597866143046536

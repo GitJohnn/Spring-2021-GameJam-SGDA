@@ -19,7 +19,7 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
     [SerializeField] private GameObject cardPanel;
     [SerializeField] private Image GameOverPanel;
     [SerializeField] private Image YouWinPanel;
-    [SerializeField] private string saveFileName;
+    [SerializeField] private string loadFileName;
     [SerializeField] int mapWidth = 40;
     [SerializeField] int mapHeight = 25;
     [SerializeField] float cellSize = 10f;
@@ -48,7 +48,7 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
         spriteTilemap.SetTileMapVisual(spriteTilemapVisual);
         movementTilemap.SetTilemapVisual(movementTilemapVisual);
 
-        spriteTilemap.Load(saveFileName);
+        spriteTilemap.Load(loadFileName);
         gridPathfinding.RaycastWalkable();
         CardPanelActivation(false);
         //gridPathfinding.PrintMap((Vector3 vec, Vector3 size, Color color) => World_Sprite.Create(vec, size, color));
@@ -79,6 +79,10 @@ public class GameHandler_GridCombatSystem : MonoBehaviour {
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            spriteTilemap.Load(loadFileName);
+        }
         HandleCameraMovement();
     }
 
