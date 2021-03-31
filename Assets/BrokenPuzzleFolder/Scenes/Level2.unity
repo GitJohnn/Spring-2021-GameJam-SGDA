@@ -2523,12 +2523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  maxMoveDistance: 5
-  maxAttackDistance: 3
   unitLight: {fileID: 1294518791}
   healthAmount: 5
-  attackStat: 2
-  defenceStat: 2
   step1: {fileID: 1201425738}
   step2: {fileID: 1201425742}
   step3: {fileID: 1201425741}
@@ -2536,6 +2532,10 @@ MonoBehaviour:
   hit1: {fileID: 1201425745}
   hit2: {fileID: 1201425744}
   hit3: {fileID: 1201425743}
+  attackStat: 2
+  defenceStat: 2
+  maxMoveDistance: 5
+  maxAttackDistance: 3
 --- !u!114 &1201425735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,7 +3547,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.8871682, y: 1}
+    m_SensorSize: {x: 1.8473451, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4278,12 +4278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  maxMoveDistance: 5
-  maxAttackDistance: 3
   unitLight: {fileID: 1603077555}
   healthAmount: 7
-  attackStat: 2
-  defenceStat: 3
   step1: {fileID: 1601887575}
   step2: {fileID: 1601887579}
   step3: {fileID: 1601887578}
@@ -4291,6 +4287,10 @@ MonoBehaviour:
   hit1: {fileID: 1601887582}
   hit2: {fileID: 1601887581}
   hit3: {fileID: 1601887580}
+  attackStat: 2
+  defenceStat: 3
+  maxMoveDistance: 5
+  maxAttackDistance: 3
 --- !u!114 &1601887572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6658,12 +6658,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  maxMoveDistance: 5
-  maxAttackDistance: 3
   unitLight: {fileID: 4688649759420706840}
   healthAmount: 10
-  attackStat: 3
-  defenceStat: 3
   step1: {fileID: 4688649758115108725}
   step2: {fileID: 4688649758115108728}
   step3: {fileID: 4688649758115108727}
@@ -6671,6 +6667,10 @@ MonoBehaviour:
   hit1: {fileID: 4688649758115108732}
   hit2: {fileID: 4688649758115108731}
   hit3: {fileID: 4688649758115108730}
+  attackStat: 3
+  defenceStat: 3
+  maxMoveDistance: 5
+  maxAttackDistance: 3
 --- !u!4 &2447763375659745397
 Transform:
   m_ObjectHideFlags: 0
@@ -6715,12 +6715,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
-  maxMoveDistance: 5
-  maxAttackDistance: 3
   unitLight: {fileID: 8207180887391118947}
   healthAmount: 5
-  attackStat: 2
-  defenceStat: 2
   step1: {fileID: 8207180888300273936}
   step2: {fileID: 8207180888300273939}
   step3: {fileID: 8207180888300273938}
@@ -6728,6 +6724,10 @@ MonoBehaviour:
   hit1: {fileID: 8207180888300273944}
   hit2: {fileID: 8207180888300273942}
   hit3: {fileID: 8207180888300273940}
+  attackStat: 2
+  defenceStat: 2
+  maxMoveDistance: 5
+  maxAttackDistance: 3
 --- !u!114 &4115997058290992605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7266,7 +7266,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ccf385095f14cef4783f2aeb24b743cc, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 1
   Mute: 0
