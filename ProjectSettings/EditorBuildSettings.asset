@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FFLXXVI/DialogueScene.unity
-    guid: 71b410dbc57b80e4fbfccd85876f71a9
-  - enabled: 1
     path: Assets/BrokenPuzzleFolder/Scenes/Level1.unity
     guid: 5512dd5cabeaaa149a1f1806b54ee13d
   - enabled: 1
