@@ -19,14 +19,15 @@ public class CardDisplay : MonoBehaviour
     public Text speedText;
     public Text defenceText;    
 
-    private Selectable selectable;
+    private EventTrigger eventTrigger;
+    private PointerEventData pointerData;
 
     // Start is called before the first frame update
     void Start()
     {
         //OnSelectCard.AddListener()
         //set Selectable
-        selectable = GetComponent<Selectable>();
+        eventTrigger = GetComponent<EventTrigger>();
 
         //Set Card properties
         nameText.text = card.name;

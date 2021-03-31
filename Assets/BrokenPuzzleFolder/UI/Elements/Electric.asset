@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Electric
   m_EditorClassIdentifier: 
   name: Zap Attack
-  description: 'Effect: Stun - Enemy cant move or attack for 1 turn'
+  description: 'Effect: Stun - Enemy can''t move or attack for 1 turn'
   artwork: {fileID: -7428187654218773408, guid: 132b356a2532ef844a002ead86821fb7,
     type: 3}
   AttackBoost: 0

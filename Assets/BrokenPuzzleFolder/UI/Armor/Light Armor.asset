@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Light Armor
   m_EditorClassIdentifier: 
   name: Light Armor
-  description: Simple Leather Armor
+  description: +1 Defence
   artwork: {fileID: 8177050102074132918, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 0
   DefenseBoost: 1

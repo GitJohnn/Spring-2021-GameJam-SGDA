@@ -22,10 +22,20 @@ public class GridCombatSystem : MonoBehaviour {
     private bool canAttackThisTurn;
 
     private bool turnCanStart = false;
+    private bool isUsingCardEffect = false;
+    private ElementCardUsed elementCardType = ElementCardUsed.None;
     [SerializeField] private Button endTurnButton;
     [SerializeField] private Button seeCardsButton;
 
     private static bool playerLost = false;
+
+    public enum ElementCardUsed
+    {
+        None,
+        Fire,
+        Ice,
+        Thunder
+    }
 
     private enum State
     {
@@ -87,7 +97,7 @@ public class GridCombatSystem : MonoBehaviour {
         UpdateValidMovePositions();
     }
 
-    private UnitGridCombat GetNextActiveUnit(UnitGridCombat.Team team)
+    public UnitGridCombat GetNextActiveUnit(UnitGridCombat.Team team)
     {
         if (team == UnitGridCombat.Team.Player)
         {
@@ -403,8 +413,9 @@ public class GridCombatSystem : MonoBehaviour {
         {
             case State.PlayerTurn:
 
-                if (Input.GetMouseButtonDown(0) && !GameHandler_GridCombatSystem.Instance.CardPanelIsActive() && turnCanStart)
+                if (Input.GetMouseButtonDown(0) && turnCanStart)
                 {
+
                     Vector3 position = UtilsClass.GetMouseWorldPosition();
                     Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
                     GridObject gridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
@@ -415,26 +426,59 @@ public class GridCombatSystem : MonoBehaviour {
                         // Clicked on top of a Unit
                         if (unitGridCombat.IsEnemy(gridObject.GetUnitGridCombat()))
                         {
-                            // Clicked on an Enemy of the current unit
-                            if (CanAttackUnit(gridObject.GetUnitGridCombat()))
+                            //Check if attacking a Unit
+                            if (!GameHandler_GridCombatSystem.Instance.CardPanelIsActive())
                             {
-                                // Can Attack Enemy
-                                if (canAttackThisTurn)
+                                // Clicked on an Enemy of the current unit
+                                if (CanAttackUnit(gridObject.GetUnitGridCombat()))
                                 {
-                                    canAttackThisTurn = false;
-                                    // Attack Enemy
-                                    //state = State.Waiting;
-                                    Debug.Log("Attacking");
-                                    gridObject.GetUnitGridCombat().Damage(unitGridCombat, Mathf.Abs(unitGridCombat.GetAttackStat() - gridObject.GetUnitGridCombat().GetDefenceStat()));
-                                    //state = State.EnemyTurn;
-                                    TestTurnOver();
+                                    // Can Attack Enemy
+                                    if (canAttackThisTurn)
+                                    {
+                                        canAttackThisTurn = false;
+                                        // Attack Enemy
+                                        //state = State.Waiting;
+                                        Debug.Log("Attacking");
+                                        gridObject.GetUnitGridCombat().Damage(Mathf.Max(0, Mathf.Abs(unitGridCombat.GetAttackStat() - gridObject.GetUnitGridCombat().GetDefenceStat())));
+                                        //state = State.EnemyTurn;
+                                        TestTurnOver();
+                                    }
+                                }
+                                else if (!isUsingCardEffect)
+                                {
+                                    // Cannot attack enemy
+                                    CodeMonkey.CMDebug.TextPopupMouse("Cannot attack!");
                                 }
                             }
-                            else
+                            //Check if using a card effect
+                            if (isUsingCardEffect)
                             {
-                                // Cannot attack enemy
-                                CodeMonkey.CMDebug.TextPopupMouse("Cannot attack!");
+                                Debug.Log("Attacking with card");
+                                switch (elementCardType)
+                                {
+                                    case ElementCardUsed.Fire:
+                                        gridObject.GetUnitGridCombat().BurnUnit();
+                                        break;
+                                    case ElementCardUsed.Thunder:
+                                        gridObject.GetUnitGridCombat().ShockUnit();
+                                        break;
+                                    case ElementCardUsed.Ice:
+                                        gridObject.GetUnitGridCombat().SlowUnit();
+                                        break;
+                                }
+                                //Activate card effect on unit on the grid
+                                //if (canAttackThisTurn)
+                                //{
+                                //    canAttackThisTurn = false;
+                                //    // Attack Enemy
+                                //    //state = State.Waiting;
+
+                                //    //gridObject.GetUnitGridCombat().//.Damage(unitGridCombat, Mathf.Abs(unitGridCombat.GetAttackStat() - gridObject.GetUnitGridCombat().GetDefenceStat()));
+                                //    //state = State.EnemyTurn;
+                                //    TestTurnOver();
+                                //}
                             }
+
                             break;
                         }
                         else
@@ -447,7 +491,7 @@ public class GridCombatSystem : MonoBehaviour {
                         // No unit here
                     }
 
-                    if (canMoveThisTurn)
+                    if (canMoveThisTurn && !GameHandler_GridCombatSystem.Instance.CardPanelIsActive())
                     {
                         if (grid.IsInGrid(position))
                         {
@@ -493,7 +537,7 @@ public class GridCombatSystem : MonoBehaviour {
                 break;
             case State.EnemyTurn:
 
-                if (canMoveThisTurn)
+                if (canMoveThisTurn && !unitGridCombat.IsShocked())
                 {
                     Grid<GridObject> grid = GameHandler_GridCombatSystem.Instance.GetGrid();
 
@@ -523,7 +567,7 @@ public class GridCombatSystem : MonoBehaviour {
 
                                 UnitGridCombat playerUnit = GetNextActiveUnit(UnitGridCombat.Team.Player);
 
-                                playerUnit.Damage(unitGridCombat, Mathf.Abs(unitGridCombat.GetAttackStat() - playerUnit.GetDefenceStat()));
+                                playerUnit.Damage(Mathf.Max(0, Mathf.Abs(unitGridCombat.GetAttackStat() - playerUnit.GetDefenceStat())));
                                 Debug.Log("Damaged player");
                                 UpdateValidMovePositions();
                                 StartCoroutine(EnemyTurnFinished(enemyWaitTime));
@@ -573,6 +617,10 @@ public class GridCombatSystem : MonoBehaviour {
         }
         if (!playerLost)
         {
+            if(unitGridCombat.GetTeam() == UnitGridCombat.Team.Enemy && unitGridCombat.IsBurned())
+            {
+                unitGridCombat.Damage(1);
+            }
             unitGridCombat.IsLightActive(false);
             SelectNextActiveUnit();
             UpdateValidMovePositions();
@@ -590,6 +638,7 @@ public class GridCombatSystem : MonoBehaviour {
             {
                 StartCoroutine(EnemyWaitTime(enemyWaitTime));
             }
+            unitGridCombat.EndTurnCounterUpdate();
         }
     }
 
@@ -608,11 +657,17 @@ public class GridCombatSystem : MonoBehaviour {
         TestTurnOver();
     }
 
-    public void PlayerTurnCanStart(bool canStart)
+    public void PlayerTurnCanStart(bool value)
     {
-        turnCanStart = canStart;
+        turnCanStart = value;
         endTurnButton.interactable = turnCanStart;
         seeCardsButton.interactable = turnCanStart;
+    }
+
+    public void UsingCardType(ElementCardUsed cardType)
+    {
+        isUsingCardEffect = true;
+        elementCardType = cardType;
     }
 
     public class GridObject {

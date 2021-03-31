@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   name: Short Sword
-  description: '"You have my sword"'
+  description: +3 attack for 3 turns
   artwork: {fileID: 3911886588699184732, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 2
   DefenseBoost: 1
