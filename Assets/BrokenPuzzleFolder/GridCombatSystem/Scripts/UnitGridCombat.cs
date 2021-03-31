@@ -8,12 +8,8 @@ using CodeMonkey.Utils;
 public class UnitGridCombat : MonoBehaviour
 {
     [SerializeField] private Team team;
-    [SerializeField] private int maxMoveDistance = 5;
-    [SerializeField] private int maxAttackDistance = 2;
     [SerializeField] private Light2D unitLight;
     [SerializeField] private int healthAmount = 100;
-    [SerializeField] private int attackStat = 3;
-    [SerializeField] private int defenceStat = 3;
 
     //private Character_Base characterBase;
     private HealthSystem healthSystem;
@@ -29,6 +25,23 @@ public class UnitGridCombat : MonoBehaviour
     public AudioSource step2;
     public AudioSource step3;
     public AudioSource step4;
+
+
+    //gameplay stats
+    [SerializeField] private int attackStat = 3;
+    [SerializeField] private int defenceStat = 3;
+    [SerializeField] private int maxMoveDistance = 5;
+    [SerializeField] private int maxAttackDistance = 2;
+    //element properties
+    int burnTurn = 0;
+    int slowTurn = 0;
+    int shockedTurn = 0;
+    //weapon properties
+    int swordBuffTurn = 0;
+    int lanceBuffTurn = 0;
+    int bowBuffTurn = 0;
+    //armor properties
+    bool hasthorns = false;
 
     public void IsLightActive(bool isActive)
     {
@@ -171,21 +184,132 @@ public class UnitGridCombat : MonoBehaviour
         //});
     }
 
-    public void Damage(UnitGridCombat attacker, int damageAmount)
+    public void Damage(int damageAmount)
     {
-        Vector3 bloodDir = (GetPosition() - attacker.GetPosition()).normalized;
+        //Vector3 bloodDir = (GetPosition() - attacker.GetPosition()).normalized;
         //Blood_Handler.SpawnBlood(GetPosition(), bloodDir);
 
-        DamagePopup.Create(GetPosition(), damageAmount, false);
+        DamagePopup.Create(GetPosition(), damageAmount, true);
         healthSystem.Damage(damageAmount);
         if (healthSystem.IsDead()) {
-            FlyingBody.Create(GameAssets.i.pfEnemyFlyingBody, GetPosition(), bloodDir);
+            //FlyingBody.Create(GameAssets.i.pfEnemyFlyingBody, GetPosition(), bloodDir);
             //Destroy(gameObject);\
             gameObject.SetActive(false);
         } else {
             // Knockback
             //transform.position += bloodDir * 5f;
         }
+    }
+
+    public void EndTurnCounterUpdate()
+    {
+        if(burnTurn > 0)
+        {
+            burnTurn--;
+        }
+        if(slowTurn > 0)
+        {
+            slowTurn--;
+        }
+        if(shockedTurn > 0)
+        {
+            shockedTurn--;
+        }
+        if(swordBuffTurn > 0)
+        {
+            swordBuffTurn--;
+            if(swordBuffTurn == 0)
+            {
+                attackStat -= 3;
+            }
+        }
+        if(lanceBuffTurn > 0)
+        {
+            lanceBuffTurn--;
+            if(lanceBuffTurn == 0)
+            {
+                attackStat -= 2;
+                maxAttackDistance -= 1;
+            }
+        }
+        if(bowBuffTurn > 0)
+        {
+            bowBuffTurn--;
+            if(bowBuffTurn == 0)
+            {
+                attackStat -= 1;
+                maxAttackDistance -= 3;
+            }
+        }
+    }
+
+    public void BurnUnit()
+    {
+        Debug.Log("unit has been burned");
+        burnTurn = 3;
+    }
+
+    public bool IsBurned()
+    {
+        return burnTurn > 0;
+    }
+
+    public void ShockUnit()
+    {
+        Debug.Log("unit has been shocked");
+        shockedTurn = 1;
+    }
+
+    public bool IsShocked()
+    {
+        return shockedTurn > 0;
+    }
+
+    public void SlowUnit()
+    {
+        Debug.Log("unit has been slowed");
+        slowTurn = 3;
+        if(maxMoveDistance != 0)
+        {
+            maxMoveDistance--;
+        }        
+    }
+
+    public bool IsSlowed()
+    {
+        return slowTurn > 0;
+    }
+
+    public void IncreaseAttack(int value, string weapon)
+    {
+        attackStat += value;
+        switch (weapon)
+        {
+            case "Sword":
+                swordBuffTurn = 3;
+                break;
+            case "Lance":
+                lanceBuffTurn = 3;
+                break;
+            case "Bow":
+                bowBuffTurn = 3;
+                break;
+        }        
+    }
+
+    public void IncreaseDistance(int value)
+    {
+        maxAttackDistance += value;
+    }
+
+    public void IncreaseDefence(int value)
+    {
+        defenceStat += value;
+    }
+
+    public void HasThorns(bool value)
+    {
+        hasthorns = value;
     }
 
     public bool IsDead()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   name: TallBow
-  description: '"And you have my bow"'
+  description: +1 attack +3 attack distance for 3 turns
   artwork: {fileID: 2213730745045412370, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 2
   DefenseBoost: 3

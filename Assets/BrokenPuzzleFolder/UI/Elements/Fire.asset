@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fire
   m_EditorClassIdentifier: 
   name: Searing Blade
-  description: 'Effect: Burn - 1 damage to enemy per turn'
+  description: 'Effect: Burn - 1 damage to enemy per turn (for 3 turns)'
   artwork: {fileID: 7621825921375074745, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 0
   DefenseBoost: 0

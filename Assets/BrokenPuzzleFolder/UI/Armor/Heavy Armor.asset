@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Heavy Armor
   m_EditorClassIdentifier: 
   name: Heavy Armor
-  description: Built like a tank, weighs close to one too
+  description: +2 Defence
   artwork: {fileID: 6643502180644588670, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 0
   DefenseBoost: 2

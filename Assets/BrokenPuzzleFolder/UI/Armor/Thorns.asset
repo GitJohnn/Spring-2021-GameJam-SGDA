@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Thorns
   m_EditorClassIdentifier: 
   name: Thorn Armor
-  description: Every rose...
+  description: 'Effect: Enemy takes 1 damage when attacking'
   artwork: {fileID: -783224397342854167, guid: 132b356a2532ef844a002ead86821fb7, type: 3}
   AttackBoost: 1
   DefenseBoost: 0
